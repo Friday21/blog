@@ -16,7 +16,7 @@ THEME = 'pelican-bootstrap3'
 BOOTSTRAP_THEME = 'cerulean'
 # BOOTSTRAP_NAVBAR_INVERSE = True
 BANNER = 'images/banner.PNG'
-DUOSHUO_SITENAME = '我的精神家园'
+DUOSHUO_SITENAME = 'fridayhaohao'
 CUSTOM_CSS = 'extra/custom.css'
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
