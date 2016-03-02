@@ -16,6 +16,7 @@ THEME = 'pelican-bootstrap3'
 BOOTSTRAP_THEME = 'cerulean'
 # BOOTSTRAP_NAVBAR_INVERSE = True
 BANNER = 'images/banner.PNG'
+STYLE_CSS = 'extra/style.css'
 CUSTOM_CSS = 'extra/custom.css'
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
