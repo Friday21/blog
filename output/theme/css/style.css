@@ -1,13 +1,7 @@
 body {
     padding-top: 70px;
-    font-family: "Microsoft YaHei", "Arial", "Verdana", "Tahoma";
-    color: #424242;
 }
 
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: "Microsoft YaHei UI", "Microsoft YaHei", "Arial", "Verdana", "Tahoma";
-    font-weight: 500;
-}
 #sidebar .list-group, #sidebar .list-group-item {
     background-color: transparent;
 }
@@ -182,14 +176,14 @@ figure.floatcenter, .align-center {
     background-position: top center;
     background-attachment: scroll;
     background-size: cover; 
-    background-color: #fff;
+    background-color: #C4C4C4;
     margin: 0 0 20px;
     padding: 70px 0; /*controls padding around inner text*/
     position: relative;
 }
 
 #banner .copy {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.7);
     display: inline;
     float: left;
     max-width: 600px;
