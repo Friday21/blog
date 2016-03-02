@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<head>
+    <title>random</title>
+    <script type="text/javascript">
+        function redirect(){
+            var urls = [
+ "/blog/紫操晨跑160301.html",
+ "/blog/紫操晨跑160229.html",
+ "/blog/my first blog.html",
+
+        ""];
+
+        var index = Math.floor(Math.random() * (urls.length-1));
+        window.location = urls[index];
+    }
+</script>
+<body onload="redirect()">
+</body>
+</html>
