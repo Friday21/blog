@@ -1,154 +1,77 @@
 <!DOCTYPE html>
-<html lang="en"
->
+<html lang="zh_CN">
 <head>
-    <title>Search - 我的精神家园
-</title>
-    <!-- Using the latest rendering mode for IE -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-
-
-        <meta name="author" content="Friday" />
-
-    <!-- Open Graph tags -->
-        <meta property="og:site_name" content="我的精神家园" />
-        <meta property="og:type" content="website"/>
-        <meta property="og:title" content="我的精神家园"/>
-        <meta property="og:url" content=""/>
-        <meta property="og:description" content="我的精神家园"/>
-
-
-    <!-- Bootstrap -->
-        <link rel="stylesheet" href="/theme/css/bootstrap.cerulean.min.css" type="text/css"/>
-    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
-
-    <link href="/theme/css/pygments/native.css" rel="stylesheet">
-    <link href="/theme/tipuesearch/tipuesearch.css" rel="stylesheet">
-    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
-        <link href="/extra/custom.css" rel="stylesheet">
-
-        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
-              title="我的精神家园 ATOM Feed"/>
-
+<meta charset="utf-8">
+<title>站内搜索</title>
 </head>
-<body>
+  <body>
+<style>
+#search-box {
+    position: relative;
+    width: 50%;
+    margin: 0;
+    padding: 1em;
+}
 
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-	<div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a href="/" class="navbar-brand">
-我的精神家园            </a>
-        </div>
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav">
-                         <li><a href="/about-me.html">
-                             About me
-                          </a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li><span>
-                <form class="navbar-search" action="/search.html">
-                  <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input" required>
-                </form></span>
-              </li>
-              <li><a href="/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-</div> <!-- /.navbar -->
-<!-- Banner -->
-<!-- End Banner -->
-<div class="container">
-    <div class="row">
-        <div class="col-sm-9">
+#search-form {
+    height: 30px;
+    border: 1px solid #999;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #fff;
+    overflow: hidden;
+}
 
-<div id="tipue_search_content"></div>
-        </div>
-        <div class="col-sm-3" id="sidebar">
-            <aside>
+#search-text {
+    font-size: 14px;
+    color: #ddd;
+    border-width: 0;
+    background: transparent;
+}
 
-<section class="well well-sm">
-    <ul class="list-group list-group-flush">
-            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
-              <ul class="list-group" id="social">
-                <li class="list-group-item"><a href="https://www.facebook.com/li.dongyong?ref=bookmarks"><i class="fa fa-facebook-square fa-lg"></i> facebook</a></li>
-                <li class="list-group-item"><a href="https://twitter.com/dongyongli"><i class="fa fa-twitter-square fa-lg"></i> twitter</a></li>
-                <li class="list-group-item"><a href="https://github.com/Friday21"><i class="fa fa-github-square fa-lg"></i> github</a></li>
-              </ul>
-            </li>
-
-
-
-            <li class="list-group-item"><a href="/tags.html"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
-                <ul class="list-group " id="tags">
-                    <li class="list-group-item tag-1">
-                        <a href="/tags/pao-bu.html">
-                            跑步
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-1">
-                        <a href="/tags/maf.html">
-                            MAF
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-4">
-                        <a href="/tags/nba.html">
-                            NBA
-                        </a>
-                    </li>
-                </ul>
-            </li>
-    </ul>
-</section>
-            </aside>
-        </div>
-    </div>
+#search-box input[type="text"] {
+    width: 90%;
+    padding: 4px 0 12px 1em;
+    color: #333;
+    outline: none;
+}
+</style>
+<div id='search-box'>
+  <form action='/search.html' id='search-form' method='get' target='_top'>
+    <input id='search-text' name='q' placeholder='Search' type='text'/>
+  </form>
 </div>
-<footer>
-   <div class="container">
-      <hr>
-      <div class="row">
-         <div class="col-xs-10">&copy; 2016 Friday
-            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
-            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
-            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
-         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
-      </div>
-   </div>
-</footer>
-<script src="/theme/js/jquery.min.js"></script>
+<div id="cse" style="width: 100%;">Loading</div>
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript"> 
+  google.load('search', '1', {language : 'zh-CN', style : google.loader.themes.V2_DEFAULT});
+  google.setOnLoadCallback(function() {
+    var customSearchOptions = {};  var customSearchControl = new google.search.CustomSearchControl(
+      '000624425788576467664:qrwumvctqgw', customSearchOptions);
+    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+    var options = new google.search.DrawOptions();
+    options.enableSearchResultsOnly(); 
+    customSearchControl.draw('cse', options);
+    function parseParamsFromUrl() {
+      var params = {};
+      var parts = window.location.search.substr(1).split('\x26');
+      for (var i = 0; i < parts.length; i++) {
+        var keyValuePair = parts[i].split('=');
+        var key = decodeURIComponent(keyValuePair[0]);
+        params[key] = keyValuePair[1] ?
+            decodeURIComponent(keyValuePair[1].replace(/\+/g, ' ')) :
+            keyValuePair[1];
+      }
+      return params;
+    }
 
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/theme/js/bootstrap.min.js"></script>
-
-<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
-<script src="/theme/js/respond.min.js"></script>
-
-    <script src="/theme/js/bodypadding.js"></script>
-
-    <link href="/theme/tipuesearch/tipuesearch.css" rel="stylesheet">
-    <script type="text/javascript" src="/theme/tipuesearch/tipuesearch_set.js"></script>
-    <script type="text/javascript" src="/theme/tipuesearch/tipuesearch.min.js"></script>
-    <script>
-    $(document).ready(function() {
-      $('#tipue_search_input').tipuesearch({
-        'mode' : 'json',
-        'show': 10,
-        'newWindow': false,
-        'contentLocation': 'tipuesearch_content.json'
-      });
-    });
-    </script>
+    var urlParams = parseParamsFromUrl();
+    var queryParamName = "q";
+    if (urlParams[queryParamName]) {
+      customSearchControl.execute(urlParams[queryParamName]);
+    }
+  }, true);
+</script>
 </body>
 </html>
