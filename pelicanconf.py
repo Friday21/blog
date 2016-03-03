@@ -26,7 +26,7 @@ AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 # Blogroll
-links = (('johnny', 'http://johnnylwang/'),
+LINKS = (('johnny', 'http://johnnylwang/'),
          )
 
 # Social widget
