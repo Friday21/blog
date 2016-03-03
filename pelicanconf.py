@@ -64,7 +64,7 @@ SITEMAP = {
      }
 RANDOM = 'random.html'
 RELATED_POSTS_MAX = 10
-DIRECT_TEMPLATES = ('index', 'categories', 'authors', 'archives', 'search')
+DIRECT_TEMPLATES = ('index', 'categories', 'authors', 'archives', 'search','tags')
 ARTICLE_URL = 'blog/{slug}.html'
 ARTICLE_SAVE_AS = 'blog/{slug}.html'
 PAGE_URL = '{slug}.html'
