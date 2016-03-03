@@ -71,8 +71,8 @@ PAGE_URL = '{slug}.html'
 PAGE_SAVE_AS = '{slug}.html'
 TAG_URL = 'tags/{slug}.html'
 TAG_SAVE_AS = 'tags/{slug}.html'
+TAGS_URL = 'tags.html'
 DISPLAY_CATEGORIES_ON_MENU = False
 DISPLAY_CATEGORIES_ON_SIDEBAR = False
 DISPLAY_TAGS_ON_SIDEBAR = True
-
 DISPLAY_TAGS_ON_SIDEBAR = True
