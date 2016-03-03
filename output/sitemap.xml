@@ -5,30 +5,37 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2016-03-02T09:39:25-00:00</lastmod>
+<lastmod>2016-03-02T21:27:47-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2016-03-02T09:39:25-00:00</lastmod>
+<lastmod>2016-03-02T21:27:47-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2016-03-02T09:39:25-00:00</lastmod>
+<lastmod>2016-03-02T21:27:47-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/about-me.html</loc>
-<lastmod>2016-03-02T09:39:25-00:00</lastmod>
+<lastmod>2016-03-02T21:27:47-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.3</priority>
+</url>
+
+<url>
+<loc>/blog/紫操晨跑160303.html</loc>
+<lastmod>2016-03-03T00:00:00+08:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
 </url>
 
 <url>
@@ -54,7 +61,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/duan-lian.html</loc>
-<lastmod>2016-03-01T00:00:00+08:06</lastmod>
+<lastmod>2016-03-03T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -68,7 +75,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/tags/pao-bu.html</loc>
-<lastmod>2016-03-01T00:00:00+08:06</lastmod>
+<lastmod>2016-03-03T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -82,14 +89,14 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/tags/maf.html</loc>
-<lastmod>2016-03-01T00:00:00+08:06</lastmod>
+<lastmod>2016-03-03T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/author/friday.html</loc>
-<lastmod>2016-03-01T00:00:00+08:06</lastmod>
+<lastmod>2016-03-03T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
