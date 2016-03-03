@@ -26,9 +26,8 @@ AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 # Blogroll
-more = (('Pelican', 'http://getpelican.com/'),
-         ('Python.org', 'http://python.org/'),
-         ('Jinja2', 'http://jinja.pocoo.org/'),)
+links = (('johnny', 'http://johnnylwang/'),
+         )
 
 # Social widget
 SOCIAL = (('facebook', 'https://www.facebook.com/li.dongyong?ref=bookmarks'),

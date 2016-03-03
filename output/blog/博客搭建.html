@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en"
+>
+<head>
+    <title>Ubuntu下Pelican + Apache 搭建个人博客 - 我的精神家园</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/blog/博客搭建.html">
+
+        <meta name="author" content="Friday" />
+        <meta name="keywords" content="pelican,python" />
+        <meta name="description" content="Ubuntu下Pelican + Apache 搭建个人博客 搭建环境 Ubuntu 14.04 LTS Pelican 3.3.0 Apache 2.4.0 VPS： digital ocean SFO（非必须，可已选择github page） 域名解析：Godaddy 环境配置 安装pelican pip install pelican 创建blog目录 cd /var/www mkdir blog pelican-quickstart 之后终端会问几个问题，一路默认回车就行（有一个要填一下，不过这些都可以在后来生成的pelicanconf.py文件中修改的） 生成的目录结构如下： blog/ ├── content # 存放输入的markdown或RST源文件 │ └── (pages) # 存放手工创建的静态页面，可选 │ └── (posts ..." />
+
+        <meta property="og:site_name" content="我的精神家园" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Ubuntu下Pelican + Apache 搭建个人博客"/>
+        <meta property="og:url" content="/blog/博客搭建.html"/>
+        <meta property="og:description" content="Ubuntu下Pelican + Apache 搭建个人博客 搭建环境 Ubuntu 14.04 LTS Pelican 3.3.0 Apache 2.4.0 VPS： digital ocean SFO（非必须，可已选择github page） 域名解析：Godaddy 环境配置 安装pelican pip install pelican 创建blog目录 cd /var/www mkdir blog pelican-quickstart 之后终端会问几个问题，一路默认回车就行（有一个要填一下，不过这些都可以在后来生成的pelicanconf.py文件中修改的） 生成的目录结构如下： blog/ ├── content # 存放输入的markdown或RST源文件 │ └── (pages) # 存放手工创建的静态页面，可选 │ └── (posts ..."/>
+        <meta property="article:published_time" content="2016-03-03" />
+            <meta property="article:section" content="建站" />
+            <meta property="article:tag" content="pelican" />
+            <meta property="article:tag" content="python" />
+            <meta property="article:author" content="Friday" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.cerulean.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link href="/theme/tipuesearch/tipuesearch.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+        <link href="/extra/custom.css" rel="stylesheet">
+
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="我的精神家园 ATOM Feed"/>
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">
+我的精神家园            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                         <li><a href="/about-me.html">
+                             About me
+                          </a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><span>
+                <form class="navbar-search" action="/search.html">
+                  <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input" required>
+                </form></span>
+              </li>
+              <li><a href="/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/blog/博客搭建.html"
+                       rel="bookmark"
+                       title="Permalink to Ubuntu下Pelican + Apache 搭建个人博客">
+                        Ubuntu下Pelican + Apache 搭建个人博客
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-03-03T00:00:00+08:00"> Thu 03 March 2016</time>
+    </span>
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tags/pelican.html">pelican</a>
+        /
+	<a href="/tags/python.html">python</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h1 id="ubuntupelican-apache">Ubuntu下Pelican + Apache 搭建个人博客</h1>
+<h2 id="_1">搭建环境</h2>
+<p>Ubuntu 14.04 LTS
+Pelican 3.3.0
+Apache 2.4.0
+VPS：  digital ocean SFO（非必须，可已选择github page）
+域名解析：Godaddy</p>
+<h2 id="_2">环境配置</h2>
+<p>安装pelican
+<code>pip install pelican</code>  </p>
+<p>创建blog目录<br />
+<code>cd /var/www</code><br />
+<code>mkdir blog</code><br />
+<code>pelican-quickstart</code>
+之后终端会问几个问题，一路默认回车就行（有一个要填一下，不过这些都可以在后来生成的pelicanconf.py文件中修改的）<br />
+生成的目录结构如下：</p>
+<p><code>blog/
+├── content                # 存放输入的markdown或RST源文件
+│   └── (pages)            # 存放手工创建的静态页面，可选
+│   └── (posts)            # 存放手工创建的文章，可选
+├── output                 # 存放最终生成的静态博客
+├── develop_server.sh      # 测试服务器
+├── Makefile               # 管理博客的Makefile
+├── pelicanconf.py         # 配置文件
+└── publishconf.py         # 发布文件，可删除</code></p>
+<h2 id="_3">主题和插件</h2>
+<ul>
+<li>克隆主题到本地
+<code>git clone https://github.com/getpelican/pelican-themes.git</code></li>
+<li>安装主题——bootstrap3
+<code>cd pelican-themes</code>
+<code>pelican-themes -i pelican-bootstrap3</code>
+这一步是将主题<code>pelican-bootstrap3</code>安装到Python库里，Ubuntu下路径为<code>/usr/local/lib/python2.7/dist-packages/pelican/themes/</code>,所以后面修改字体和banner时需要在这个文件夹下的<code>pelican-bootstrap3/templates</code>文件修改
+*克隆插件到本地
+<code>cd /var/www/blog</code>
+<code>git clone git://github.com/getpelican/pelican-plugins.git</code>
+此处将pelican的插件放在<code>/var/www/blog</code>的文件夹下</li>
+</ul>
+<h2 id="pelicanconfpy">配置pelicanconf.py</h2>
+<p>博客的很多内容都是在<code>/var/www/blog/pelicancof.py</code>文件中配置的</p>
+<div class="highlight"><pre><span></span>AUTHOR = u&#39;Friday&#39;
+SITENAME = u&#39;\u6211\u7684\u7cbe\u795e\u5bb6\u56ed&#39; 博客名字
+SITEURL = &#39;http://localhost:80&#39; 
+TIMEZONE = &#39;Asia/Shanghai&#39; 时区改成上海
+THEME = &#39;pelican-bootstrap3&#39;主题设置为pelican-bootstrap3
+
+添加社交账号
+SOCIAL = ((&#39;facebook&#39;, &#39;https://www.facebook.com/li.dongyong?ref=bookmarks&#39;),
+          (&#39;twitter&#39;,&#39;https://twitter.com/dongyongli&#39;),
+          (&#39;github&#39;,&#39;https://github.com/Friday21&#39;),)
+
+DEFAULT_PAGINATION = 5 每页显示5篇文章
+
+PLUGIN_PATHS = [u&#39;pelican-plugins&#39;,]插件地址，因为插件放在了和blog同级目录，所以可以       直接用pelican-plugins, 若放在其他地方改成相应路径即可
+PLUGINS = [&#39;sitemap&#39;, &#39;related_posts&#39;, &#39;random_article&#39;,
+           &#39;liquid_tags.img&#39;, &#39;liquid_tags.video&#39;,
+           &#39;liquid_tags.youtube&#39;, &#39;liquid_tags.vimeo&#39;,
+           &#39;liquid_tags.include_code&#39;,&#39;tag_cloud&#39;,&#39;tipue_search&#39;]使用到的插件
+RANDOM = &#39;random.html&#39;
+RELATED_POSTS_MAX = 10
+DIRECT_TEMPLATES = (&#39;index&#39;, &#39;categories&#39;, &#39;authors&#39;, &#39;archives&#39;, &#39;tags&#39;,&#39;search&#39;)
+ARTICLE_URL = &#39;blog/{slug}.html&#39;
+ARTICLE_SAVE_AS = &#39;blog/{slug}.html&#39;
+PAGE_URL = &#39;{slug}.html&#39;
+PAGE_SAVE_AS = &#39;{slug}.html&#39;
+TAG_URL = &#39;tags/{slug}.html&#39;
+TAG_SAVE_AS = &#39;tags/{slug}.html&#39;
+TAGS_URL = &#39;tags.html&#39;
+DISPLAY_CATEGORIES_ON_MENU = False
+DISPLAY_CATEGORIES_ON_SIDEBAR = False 不显示categories（感觉有tags就够了）
+DISPLAY_TAGS_ON_SIDEBAR = True 在边上显示标签栏
+</pre></div>
+
+
+<h2 id="_4">发布第一篇博客</h2>
+<p>用markdown写下第一篇文章，开头要包含以下内容：</p>
+<div class="highlight"><pre><span></span><span class="n">Title</span><span class="o">:</span> <span class="n">My</span> <span class="kd">super</span> <span class="n">title</span> <span class="err">必须</span>
+<span class="n">Date</span><span class="o">:</span> <span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">03</span> <span class="mi">10</span><span class="o">:</span><span class="mi">20</span> <span class="err">必须</span>
+<span class="n">Modified</span><span class="o">:</span> <span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">05</span> <span class="mi">19</span><span class="o">:</span><span class="mi">30</span>
+<span class="n">Category</span><span class="o">:</span> <span class="n">Python</span>
+<span class="n">Tags</span><span class="o">:</span> <span class="n">pelican</span><span class="o">,</span> <span class="n">publishing</span>
+<span class="n">Slug</span><span class="o">:</span> <span class="n">my</span><span class="o">-</span><span class="kd">super</span><span class="o">-</span><span class="n">post</span> <span class="err">必须</span>
+<span class="n">Authors</span><span class="o">:</span> <span class="n">Alexis</span> <span class="n">Metaireau</span><span class="o">,</span> <span class="n">Conan</span> <span class="n">Doyle</span>
+<span class="n">Summary</span><span class="o">:</span> <span class="n">Short</span> <span class="n">version</span> <span class="k">for</span> <span class="n">index</span> <span class="n">and</span> <span class="n">feeds</span>
+</pre></div>
+
+
+<p>写好后把md文件放在blog下的content目录中，发布博客
+<code>cd /var/www/blog</code>
+<code>make publish</code>
+如果成功的话可以在blog目录下看到output文件夹，里面就是网站的所有内容，将其部署到github pages上即可以访问，在github创建username.github.io repo，其中username为你github的用户名，然后在Ubuntu上把博客内容推送到github pages上</p>
+<div class="highlight"><pre><span></span>cd /var/www/blog/output
+git init
+git add .
+git commit -m&#39;first commit&#39;
+git remote add origin git@github.com:username/username.github.io.git
+git push -u origin master
+</pre></div>
+
+
+<p>成功后访问username.github.io即能成功看到你的blog</p>
+<h2 id="apache">Apache 配置</h2>
+<p>如果不想用github page当然也可以用自己的VPS，让blog运行在Apache上
+<em> 安装Apache
+<code>sudo apt-get install apache2</code>
+</em> 配置虚拟主机
+<code>cd /etc/apache2/sites-available/</code>
+新建blog的配置文件
+<code>vim blog.conf</code> 
+添加如下内容</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;Directory</span> <span class="err">/var/www/blog/output</span><span class="nt">&gt;</span> #博客目录
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+<span class="nt">&lt;/Directory&gt;</span>
+<span class="nt">&lt;VirtualHost</span> <span class="err">*:80</span><span class="nt">&gt;</span>
+    # Admin email, Server Name (domain name) and any aliases
+    ServerAdmin lidongyong22@gmail.com 
+    ServerName  fridayhaohao.com 服务器名字
+    ServerAlias www.fridayhaohao.com #域名
+
+    # Index file and Document Root (where the public files are located)
+    DirectoryIndex index.php index.html
+    DocumentRoot /var/www/blog/output 文件目录
+<span class="nt">&lt;/VirtualHost&gt;</span>
+</pre></div>
+
+
+<p>使文件生效：</p>
+<div class="highlight"><pre><span></span>$ sudo a2ensite duncanlock.test
+$ sudo service apache2 restart
+</pre></div>
+
+
+<p>成功后需要在godaday上将你的域名连接到服务器上的ip， 在DNS ZONE FILE下添加一天A记录，HOST：@，POINTS TO: 你的服务器IP，等待一段时间后就可以通过你的域名来访问你的blog啦！</p>
+<h2 id="_5">进一步完善博客</h2>
+<h3 id="banner">banner</h3>
+<h3 id="_6">字体</h3>
+<h3 id="bootstrap">bootstrap主题</h3>
+<h3 id="_7">多说评论</h3>
+<h3 id="google">Google站内搜索</h3>
+<h3 id="_8">表格的添加技巧</h3>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+        <div class="ds-thread" data-thread-key="博客搭建" data-title="Ubuntu下Pelican + Apache 搭建个人博客" data-url="/blog/博客搭建.html"></div>
+        <script type="text/javascript">
+            var duoshuoQuery = {short_name:"fridayhaohao"};
+            (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0]
+                 || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://duoshuo.com/">comments powered by
+        Duoshuo.</a></noscript>
+        <a href="http://duoshuo.com" class="dsq-brlink">comments powered by <span>Duoshuo</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="https://www.facebook.com/li.dongyong?ref=bookmarks"><i class="fa fa-facebook-square fa-lg"></i> facebook</a></li>
+                <li class="list-group-item"><a href="https://twitter.com/dongyongli"><i class="fa fa-twitter-square fa-lg"></i> twitter</a></li>
+                <li class="list-group-item"><a href="https://github.com/Friday21"><i class="fa fa-github-square fa-lg"></i> github</a></li>
+              </ul>
+            </li>
+
+
+
+            <li class="list-group-item"><a href="/tags.html"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+                <ul class="list-group " id="tags">
+                    <li class="list-group-item tag-1">
+                        <a href="/tags/maf.html">
+                            MAF
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-1">
+                        <a href="/tags/pao-bu.html">
+                            跑步
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="/tags/python.html">
+                            python
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="/tags/pelican.html">
+                            pelican
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="/tags/nba.html">
+                            NBA
+                        </a>
+                    </li>
+                </ul>
+            </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Friday
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+    <script src="/theme/js/bodypadding.js"></script>
+    <!-- Google Analytics -->
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-74647195-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+    <!-- End Google Analytics Code -->
+
+</body>
+</html>

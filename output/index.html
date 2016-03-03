@@ -85,6 +85,32 @@
         <div class="col-sm-9">
 
             <article>
+                <h2><a href="/blog/博客搭建.html">Ubuntu下Pelican + Apache 搭建个人博客</a></h2>
+                <div class="summary"><h1 id="ubuntupelican-apache">Ubuntu下Pelican + Apache 搭建个人博客</h1>
+<h2 id="_1">搭建环境</h2>
+<p>Ubuntu 14.04 LTS
+Pelican 3.3.0
+Apache 2.4.0
+VPS：  digital ocean SFO（非必须，可已选择github page）
+域名解析：Godaddy</p>
+<h2 id="_2">环境配置</h2>
+<p>安装pelican
+<code>pip install pelican</code>  </p>
+<p>创建blog目录<br />
+<code>cd /var/www</code><br />
+<code>mkdir blog</code><br />
+<code>pelican-quickstart</code>
+之后终端会问几个问题，一路默认回车就行（有一个要填一下，不过这些都可以在后来生成的pelicanconf.py文件中修改的）<br />
+生成的目录结构如下：</p>
+<p><code>blog/
+├── content                # 存放输入的markdown或RST源文件
+│   └── (pages)            # 存放手工创建的静态页面，可选
+│   └── (posts ...</code></p>
+                    <a class="btn btn-default btn-xs" href="/blog/博客搭建.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
                 <h2><a href="/blog/紫操晨跑160303.html">紫操晨跑160303</a></h2>
                 <div class="summary"><h3 id="160303">晨跑记录160303</h3>
 <p><table class="table table-bordered table-striped table-condensed">
@@ -356,6 +382,16 @@
                     <li class="list-group-item tag-1">
                         <a href="/tags/pao-bu.html">
                             跑步
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="/tags/python.html">
+                            python
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="/tags/pelican.html">
+                            pelican
                         </a>
                     </li>
                     <li class="list-group-item tag-4">

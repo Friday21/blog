@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>About me - 我的精神家园</title>
+    <title>建站 - 我的精神家园</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -10,16 +10,16 @@
 
 
 
-<link rel="canonical" href="/about-me.html">
 
-        <meta name="author" content="Friday" />
-        <meta name="description" content="我是李东勇，清华大学物理系在读硕士。我认为低智、偏执、思想贫乏是最大的邪恶，无知是罪，罪不可恕，此生致力于不断丰富自己的认知，做一个有趣的人。 须知参差多态，乃是幸福的本源。 ——罗素" />
+    <meta name="author" content="Friday" />
+    <meta name="keywords" content="建站" />
 
-    <meta property="og:site_name" content="我的精神家园" />
-    <meta property="og:type" content="article"/>
-    <meta property="og:title" content="About me"/>
-    <meta property="og:url" content="/about-me.html"/>
-    <meta property="og:description" content="我是李东勇，清华大学物理系在读硕士。我认为低智、偏执、思想贫乏是最大的邪恶，无知是罪，罪不可恕，此生致力于不断丰富自己的认知，做一个有趣的人。 须知参差多态，乃是幸福的本源。 ——罗素" />
+    <!-- Open Graph tags -->
+        <meta property="og:site_name" content="我的精神家园" />
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" content="我的精神家园"/>
+        <meta property="og:url" content=""/>
+        <meta property="og:description" content="我的精神家园"/>
 
 
     <!-- Bootstrap -->
@@ -51,7 +51,7 @@
         </div>
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
-                         <li class="active"><a href="/about-me.html">
+                         <li><a href="/about-me.html">
                              About me
                           </a></li>
             </ul>
@@ -73,16 +73,33 @@
     <div class="row">
         <div class="col-sm-9">
 
-    <section id="content" class="body">
-        <h1 class="entry-title">About me</h1>
-        
-        <div class="entry-content">
-            <p>我是李东勇，清华大学物理系在读硕士。我认为低智、偏执、思想贫乏是最大的邪恶，无知是罪，罪不可恕，此生致力于不断丰富自己的认知，做一个有趣的人。  </p>
-<blockquote>
-<p>须知参差多态，乃是幸福的本源。            ——罗素</p>
-</blockquote>
-        </div>
-    </section>
+            <article>
+                <h2><a href="/blog/博客搭建.html">Ubuntu下Pelican + Apache 搭建个人博客</a></h2>
+                <div class="summary"><h1 id="ubuntupelican-apache">Ubuntu下Pelican + Apache 搭建个人博客</h1>
+<h2 id="_1">搭建环境</h2>
+<p>Ubuntu 14.04 LTS
+Pelican 3.3.0
+Apache 2.4.0
+VPS：  digital ocean SFO（非必须，可已选择github page）
+域名解析：Godaddy</p>
+<h2 id="_2">环境配置</h2>
+<p>安装pelican
+<code>pip install pelican</code>  </p>
+<p>创建blog目录<br />
+<code>cd /var/www</code><br />
+<code>mkdir blog</code><br />
+<code>pelican-quickstart</code>
+之后终端会问几个问题，一路默认回车就行（有一个要填一下，不过这些都可以在后来生成的pelicanconf.py文件中修改的）<br />
+生成的目录结构如下：</p>
+<p><code>blog/
+├── content                # 存放输入的markdown或RST源文件
+│   └── (pages)            # 存放手工创建的静态页面，可选
+│   └── (posts ...</code></p>
+                    <a class="btn btn-default btn-xs" href="/blog/博客搭建.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+
         </div>
         <div class="col-sm-3" id="sidebar">
             <aside>
