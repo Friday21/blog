@@ -46,7 +46,7 @@ PLUGIN_PATHS = [u'pelican-plugins',]
 PLUGINS = ['sitemap', 'related_posts', 'random_article',
            'liquid_tags.img', 'liquid_tags.video',
            'liquid_tags.youtube', 'liquid_tags.vimeo',
-           'liquid_tags.include_code','tag_cloud','tipue_search']
+           'liquid_tags.include_code','tag_cloud']
 
 # 配置sitemap插件
 SITEMAP = {
@@ -77,4 +77,4 @@ DISPLAY_CATEGORIES_ON_SIDEBAR = False
 DISPLAY_TAGS_ON_SIDEBAR = True
 DISPLAY_TAGS_ON_SIDEBAR = True
 
-GOOGLE__SEARCH = '000624425788576467664:qrwumvctqgw'
+GOOGLE__SEARCH = True
