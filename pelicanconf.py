@@ -42,7 +42,7 @@ MD_EXTENSIONS = ['codehilite(css_class=highlight)', 'extra','headerid']
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
 # 插件
-PLUGIN_PATH = u'pelican-plugins'
+PLUGIN_PATHS = [u'pelican-plugins',]
 PLUGINS = ['sitemap', 'related_posts', 'random_article',
            'liquid_tags.img', 'liquid_tags.video',
            'liquid_tags.youtube', 'liquid_tags.vimeo',
