@@ -46,7 +46,7 @@ PLUGIN_PATH = u'pelican-plugins'
 PLUGINS = ['sitemap', 'related_posts', 'random_article',
            'liquid_tags.img', 'liquid_tags.video',
            'liquid_tags.youtube', 'liquid_tags.vimeo',
-           'liquid_tags.include_code','tag_cloud','tique_search']
+           'liquid_tags.include_code','tag_cloud','tipue_search']
 
 # 配置sitemap插件
 SITEMAP = {
