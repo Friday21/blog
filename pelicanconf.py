@@ -27,7 +27,7 @@ AUTHOR_FEED_RSS = None
 
 # Blogroll
 LINKS = (('johnny', 'http://johnnylwang.com/'),
-         )
+         ('金良山庄',' http://blog.csdn.net/u012176591'), )
 
 # Social widget
 SOCIAL = (('facebook', 'https://www.facebook.com/li.dongyong?ref=bookmarks'),
