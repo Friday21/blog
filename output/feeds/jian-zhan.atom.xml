@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>我的精神家园</title><link href="/" rel="alternate"></link><link href="/feeds/jian-zhan.atom.xml" rel="self"></link><id>/</id><updated>2016-03-04T00:00:00+08:00</updated><entry><title>我的blog是如何搭建起来的</title><link href="/blog/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA.html" rel="alternate"></link><updated>2016-03-04T00:00:00+08:00</updated><author><name>Friday</name></author><id>tag:,2016-03-03:blog/博客搭建.html</id><summary type="html">&lt;h1 id="ubuntupelican-apache"&gt;Ubuntu下Pelican + Apache 搭建个人博客&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>我的精神家园</title><link href="/" rel="alternate"></link><link href="/feeds/jian-zhan.atom.xml" rel="self"></link><id>/</id><updated>2016-03-05T00:00:00+08:00</updated><entry><title>Ubuntu下Pelican + Apache 搭建个人博客</title><link href="/blog/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA.html" rel="alternate"></link><updated>2016-03-05T00:00:00+08:00</updated><author><name>Friday</name></author><id>tag:,2016-03-03:blog/博客搭建.html</id><summary type="html">&lt;h1 id="ubuntupelican-apache"&gt;Ubuntu下Pelican + Apache 搭建个人博客&lt;/h1&gt;
 &lt;h2 id="_1"&gt;搭建环境&lt;/h2&gt;
 &lt;p&gt;Ubuntu 14.04 LTS
 Pelican 3.3.0
@@ -135,9 +135,207 @@ $ sudo service apache2 restart
 
 &lt;p&gt;成功后需要在godaday上将你的域名连接到服务器上的ip， 在DNS ZONE FILE下添加一天A记录，HOST：@，POINTS TO: 你的服务器IP，等待一段时间后就可以通过你的域名来访问你的blog啦！&lt;/p&gt;
 &lt;h2 id="_5"&gt;进一步完善博客&lt;/h2&gt;
-&lt;h3 id="banner"&gt;banner&lt;/h3&gt;
-&lt;h3 id="_6"&gt;字体&lt;/h3&gt;
 &lt;h3 id="bootstrap"&gt;bootstrap主题&lt;/h3&gt;
-&lt;h3 id="_7"&gt;多说评论&lt;/h3&gt;
+&lt;p&gt;bootstrap下还细分有很多主题，免费的可以在&lt;a href="http://bootswatch.com/"&gt;这里&lt;/a&gt;看到，我选的是Cerulean, 舒服的蓝色主题，只需要在pelicanconf.py中添加&lt;code&gt;BOOTSTRAP_THEME = 'cerulean'&lt;/code&gt;, 然后在blog目录下make publish 就会生效了&lt;/p&gt;
+&lt;h3 id="banner"&gt;banner&lt;/h3&gt;
+&lt;p&gt;根据DandyDev的pelican-bootstrap3的&lt;a href="https://github.com/DandyDev/pelican-bootstrap3"&gt;文档&lt;/a&gt;的说明：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A banner image can be added to the theme, displayed with the SITENAME and an optional subtitle. Config options are as follows:
+Set the banner image with BANNER = '/path/to/banner.png'
+Set the subtitle text with BANNER_SUBTITLE = 'This is my subtitle'
+By default, the banner is only shown on the index page. To display the banner on all pages, set BANNER_ALL_PAGES = True  &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在content目录下新建文件夹&lt;code&gt;images&lt;/code&gt;, 把要设置的首页头部图片放在此文件夹下，并在pelican.conf中添加 &lt;code&gt;BANNER = '/images/banner.png'&lt;/code&gt;, banner.png 为图片的文件名，建议选好想要的图片后调整到适合的长宽比，用截图工具就行。我选了一张大海的图片，与上一步选的主题配合的很好。效果如下图：&lt;img alt="Alt text" src="images/捕获.PNG" /&gt;&lt;/p&gt;
+&lt;h3 id="_6"&gt;字体&lt;/h3&gt;
+&lt;p&gt;pelican默认英文字体，所以中文显示很难看！按照习惯还是调成微软雅黑舒服一点，办法如下：
+尽如Python的pelican库文件夹，编辑style.css文件我的目录是&lt;code&gt;/usr/local/lib/python2.7/dist-packages/pelican/themes/pelican-bootstrap3/static/css/style.css&lt;/code&gt;
+在头部添加以下两段：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;h2&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;h3&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;h4&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;h5&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;h6&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h2&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h3&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h4&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h5&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h6&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;font-family&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Microsoft YaHei UI&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Microsoft YaHei&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Arial&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Verdana&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Tahoma&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;font-weight&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;500&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="nt"&gt;body&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;font-family&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Microsoft YaHei&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Arial&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Verdana&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Tahoma&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#424242&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;make publish 后就能看到中文显示舒服多了。
+其实在这个文件中还可以进一步美化banner，比如把我的精神家园后面的黑框改为透明的，只需要把backgroud中的0.7改为0就行啦&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nn"&gt;#banner&lt;/span&gt; &lt;span class="nc"&gt;.copy&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;background&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;none&lt;/span&gt; &lt;span class="nb"&gt;repeat&lt;/span&gt; &lt;span class="nb"&gt;scroll&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="n"&gt;rgba&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="m"&gt;7&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="nb"&gt;display&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;inline&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;left&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;max-width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;600px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;padding&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;20px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;position&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;relative&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;z-index&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;改完后make publish就能看到效果了，体会下两张图的不同：
+&lt;img alt="Alt text" src="images/banner1.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt text" src="images/banner2.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;下图是设置为0.7的效果，上图是设置成0的透明效果。哈哈虽然前端基础为0，但这个过程中对前端增加了些了解。&lt;/p&gt;
+&lt;h3 id="_7"&gt;添加多说评论&lt;/h3&gt;
+&lt;p&gt;作为blog怎么能少的了评论呢，pelican自带的评论插件是Disqus comments， 但那是针对国外用户的，咱在局域网中上不了Facebook和Twitter，所以还是选择国内有名的评论插件——多说评论。&lt;br /&gt;
+首先需要在&lt;a href="http://duoshuo.com/"&gt;多说&lt;/a&gt;的网站上注册，绑定网站信息，获取js代码，并根据提示修改成如下代码：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c"&gt;&amp;lt;!-- 多说评论框 start --&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;div&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;ds-thread&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-thread-key=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nv"&gt;article.slug&lt;/span&gt; &lt;span class="cp"&gt;}}&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-title=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nv"&gt;article.title&lt;/span&gt; &lt;span class="cp"&gt;}}&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-url=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nv"&gt;SITEURL&lt;/span&gt; &lt;span class="cp"&gt;}}&lt;/span&gt;&lt;span class="s"&gt;/&lt;/span&gt;&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nv"&gt;article.url&lt;/span&gt; &lt;span class="cp"&gt;}}&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt;&amp;lt;!-- 多说评论框 end --&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt;&amp;lt;!-- 多说公共JS代码 start (一个网页只需插入一次) --&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;script&lt;/span&gt; &lt;span class="na"&gt;type=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+var duoshuoQuery = {short_name:&amp;quot;lyon0804&amp;quot;};
+    (function() {
+        var ds = document.createElement(&amp;#39;script&amp;#39;);
+        ds.type = &amp;#39;text/javascript&amp;#39;;ds.async = true;
+        ds.src = (document.location.protocol == &amp;#39;https:&amp;#39; ? &amp;#39;https:&amp;#39; : &amp;#39;http:&amp;#39;) + &amp;#39;//static.duoshuo.com/embed.js&amp;#39;;
+        ds.charset = &amp;#39;UTF-8&amp;#39;;
+        (document.getElementsByTagName(&amp;#39;head&amp;#39;)[0]
+         || document.getElementsByTagName(&amp;#39;body&amp;#39;)[0]).appendChild(ds);
+    })();
+    &lt;span class="nt"&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt;&amp;lt;!-- 多说公共JS代码 end --&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;尽如pelican的Python库，编辑评论模板，&lt;br /&gt;
+&lt;code&gt;vim /usr/local/lib/python2.7/dist-packages/pelican/themes/pelican-bootstrap3/templates/includes/comments.html&lt;/code&gt;
+对照着disqus评论添加如下内容：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nv"&gt;DUOSHUO_SITENAME&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;hr/&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;section&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;comments&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;id=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;comments&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;h2&amp;gt;&lt;/span&gt;Comments&lt;span class="nt"&gt;&amp;lt;/h2&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;div&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;ds-thread&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-thread-key=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nv"&gt;article.slug&lt;/span&gt; &lt;span class="cp"&gt;}}&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-title=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nv"&gt;article.title&lt;/span&gt; &lt;span class="cp"&gt;}}&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-url=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nv"&gt;SITEURL&lt;/span&gt; &lt;span class="cp"&gt;}}&lt;/span&gt;&lt;span class="s"&gt;/&lt;/span&gt;&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nv"&gt;article.url&lt;/span&gt; &lt;span class="cp"&gt;}}&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;script&lt;/span&gt; &lt;span class="na"&gt;type=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+            var duoshuoQuery = {short_name:&amp;quot;&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nv"&gt;DUOSHUO_SITENAME&lt;/span&gt; &lt;span class="cp"&gt;}}&lt;/span&gt;&amp;quot;};
+            (function() {
+                var ds = document.createElement(&amp;#39;script&amp;#39;);
+                ds.type = &amp;#39;text/javascript&amp;#39;;ds.async = true;
+                ds.src = (document.location.protocol == &amp;#39;https:&amp;#39; ? &amp;#39;https:&amp;#39; : &amp;#39;http:&amp;#39;) + &amp;#39;//static.duoshuo.com/embed.js&amp;#39;;
+                ds.charset = &amp;#39;UTF-8&amp;#39;;
+                (document.getElementsByTagName(&amp;#39;head&amp;#39;)[0]
+                 || document.getElementsByTagName(&amp;#39;body&amp;#39;)[0]).appendChild(ds);
+            })();
+        &lt;span class="nt"&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;noscript&amp;gt;&lt;/span&gt;Please enable JavaScript to view the &lt;span class="nt"&gt;&amp;lt;a&lt;/span&gt; &lt;span class="na"&gt;href=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;http://duoshuo.com/&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;comments powered by
+        Duoshuo.&lt;span class="nt"&gt;&amp;lt;/a&amp;gt;&amp;lt;/noscript&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;a&lt;/span&gt; &lt;span class="na"&gt;href=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;http://duoshuo.com&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;dsq-brlink&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;comments powered by &lt;span class="nt"&gt;&amp;lt;span&amp;gt;&lt;/span&gt;Duoshuo&lt;span class="nt"&gt;&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+
+    &lt;span class="nt"&gt;&amp;lt;/section&amp;gt;&lt;/span&gt;
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;endif&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然后在pelicanconf.py中添加DUOSHUO_SITENAME字段，make publish 即可生效，我在多说网站上填的是fridayhaohao，所以我添加了&lt;code&gt;DUOSHUO_SITENAME = 'fridayhaohao'&lt;/code&gt;&lt;/p&gt;
 &lt;h3 id="google"&gt;Google站内搜索&lt;/h3&gt;
-&lt;h3 id="_8"&gt;表格的添加技巧&lt;/h3&gt;</summary><category term="pelican"></category><category term="python"></category></entry></feed>
+&lt;p&gt;pelican自带的tipue_search用起来bug多多，果断换成高大上的Google站内搜索 ，根据网上的指导自己怎么做都不成功，最终折腾的结果是在pelicanconf中启用tipue_search（因为我懒得去调搜索框的大小），但是把search.html内容换成Google站内搜索的代码，搞定！(pelican-bootstrap3似乎没有bootstrap2的Google搜索内置代码，坑！)
+* 启用tipue_search
+在PLUGINS中添加tipue_search
+在DIRECT_TEMPLATES中添加search&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;PLUGINS = [&amp;#39;sitemap&amp;#39;, &amp;#39;related_posts&amp;#39;, &amp;#39;random_article&amp;#39;,
+           &amp;#39;liquid_tags.img&amp;#39;, &amp;#39;liquid_tags.video&amp;#39;,
+           &amp;#39;liquid_tags.youtube&amp;#39;, &amp;#39;liquid_tags.vimeo&amp;#39;,
+           &amp;#39;liquid_tags.include_code&amp;#39;,&amp;#39;tag_cloud&amp;#39;,&amp;#39;tipue_search&amp;#39;]
+DIRECT_TEMPLATES = (&amp;#39;index&amp;#39;, &amp;#39;categories&amp;#39;, &amp;#39;authors&amp;#39;, &amp;#39;archives&amp;#39;, &amp;#39;tags&amp;#39;,&amp;#39;search&amp;#39;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;换成Google站内搜索
+首先在&lt;a href="https://cse.google.com/cse/all"&gt;Google站内搜索&lt;/a&gt;申请，得到自己的ID，然后把search.html替换为如下内容：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;html&lt;/span&gt; &lt;span class="na"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;zh_CN&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;head&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;meta&lt;/span&gt; &lt;span class="na"&gt;charset&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;utf-8&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;站内搜索&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;head&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;body&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="nn"&gt;#search-box&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;position&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;relative&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;50%&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;margin&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;padding&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;1em&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="nn"&gt;#search-form&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;height&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;30px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;border&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;1px&lt;/span&gt; &lt;span class="nb"&gt;solid&lt;/span&gt; &lt;span class="m"&gt;#999&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;webkit&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nb"&gt;border&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;radius&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;5px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;moz&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nb"&gt;border&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;radius&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;5px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;border&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;radius&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;5px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;background-color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#fff&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;overflow&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;hidden&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="nn"&gt;#search-text&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;font-size&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;14px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#ddd&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;border-width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;background&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;transparent&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="nn"&gt;#search-box&lt;/span&gt; &lt;span class="nt"&gt;input&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="nt"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;90%&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;padding&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;4px&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="m"&gt;12px&lt;/span&gt; &lt;span class="m"&gt;1em&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#333&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;outline&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;none&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;search-box&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt; &lt;span class="na"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;/search.html&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;search-form&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;method&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;get&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;target&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;_top&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;input&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;search-text&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;q&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;placeholder&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Search&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;text&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;cse&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;style&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;width: 100%;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Loading&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt; &lt;span class="na"&gt;src&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;http://www.google.com/jsapi&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt; 
+  &lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;load&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;search&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;language&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;zh-CN&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;style&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;loader&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;themes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;V2_DEFAULT&lt;/span&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+  &lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;setOnLoadCallback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;customSearchOptions&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{};&lt;/span&gt;  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;customSearchControl&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;CustomSearchControl&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+      &lt;span class="s1"&gt;&amp;#39;012191777864628038963:**********&amp;lt;!写入你申请的google站内搜索的ID号&amp;gt;）&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;customSearchOptions&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="nx"&gt;customSearchControl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;setResultSetSize&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;FILTERED_CSE_RESULTSET&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;options&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;DrawOptions&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="nx"&gt;options&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;enableSearchResultsOnly&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; 
+    &lt;span class="nx"&gt;customSearchControl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;draw&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;cse&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;options&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;parseParamsFromUrl&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;params&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{};&lt;/span&gt;
+      &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;parts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;substr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\x26&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+      &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="nx"&gt;parts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;keyValuePair&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;parts&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="p"&gt;].&lt;/span&gt;&lt;span class="nx"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;=&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;key&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;decodeURIComponent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;keyValuePair&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="nx"&gt;params&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;key&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;keyValuePair&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt;
+            &lt;span class="nb"&gt;decodeURIComponent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;keyValuePair&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;].&lt;/span&gt;&lt;span class="nx"&gt;replace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sr"&gt;/\+/g&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39; &amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt;
+            &lt;span class="nx"&gt;keyValuePair&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+      &lt;span class="p"&gt;}&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;params&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;urlParams&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;parseParamsFromUrl&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;queryParamName&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;q&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;urlParams&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;queryParamName&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nx"&gt;customSearchControl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;execute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;urlParams&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;queryParamName&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;body&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;html&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;make publish 生效，但是&lt;strong&gt;局域网&lt;/strong&gt;内上不了Google，所以搜索功能只能翻墙使用，但对我来说不算问题，blog搜索功能主要还是自己用&lt;/p&gt;
+&lt;h3 id="_8"&gt;参考文章&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="http://guozhongxin.com/pages/2014/09/25/build_blog_with_pelican.html"&gt;谷歌站内搜索&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.lyon0804.com/zai-pelicanzhong-shi-yong-duo-shuo.html"&gt;添加多说评论&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://edi.wang/Post/2013/12/9/bootstrap-3-usage-experience"&gt;字体设置&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://blog.atime.me/note/pelican-setup-summary.html"&gt;pelicanconf.py配置&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.lizherui.com/pages/2013/08/17/build_blog.html"&gt;pelican搭建教程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.jianshu.com/p/d80a5cefc128"&gt;pelican搭建教程2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://duncanlock.net/blog/2013/05/17/how-i-built-this-website-using-pelican-part-1-setup/"&gt;apache2配置&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</summary><category term="pelican"></category><category term="python"></category></entry></feed>
