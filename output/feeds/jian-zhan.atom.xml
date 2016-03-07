@@ -144,7 +144,7 @@ Set the banner image with BANNER = '/path/to/banner.png'
 Set the subtitle text with BANNER_SUBTITLE = 'This is my subtitle'
 By default, the banner is only shown on the index page. To display the banner on all pages, set BANNER_ALL_PAGES = True  &lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;在content目录下新建文件夹&lt;code&gt;images&lt;/code&gt;, 把要设置的首页头部图片放在此文件夹下，并在pelican.conf中添加 &lt;code&gt;BANNER = '/images/banner.png'&lt;/code&gt;, banner.png 为图片的文件名，建议选好想要的图片后调整到适合的长宽比，用截图工具就行。我选了一张大海的图片，与上一步选的主题配合的很好。效果如下图：&lt;img alt="Alt text" src="images/捕获.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;在content目录下新建文件夹&lt;code&gt;images&lt;/code&gt;, 把要设置的首页头部图片放在此文件夹下，并在pelican.conf中添加 &lt;code&gt;BANNER = '/images/banner.png'&lt;/code&gt;, banner.png 为图片的文件名，建议选好想要的图片后调整到适合的长宽比，用截图工具就行。我选了一张大海的图片，与上一步选的主题配合的很好。效果如下图：&lt;img alt="Alt text" src="/images/捕获.PNG" /&gt;&lt;/p&gt;
 &lt;h3 id="_6"&gt;字体&lt;/h3&gt;
 &lt;p&gt;pelican默认英文字体，所以中文显示很难看！按照习惯还是调成微软雅黑舒服一点，办法如下：
 尽如Python的pelican库文件夹，编辑style.css文件我的目录是&lt;code&gt;/usr/local/lib/python2.7/dist-packages/pelican/themes/pelican-bootstrap3/static/css/style.css&lt;/code&gt;
@@ -176,8 +176,8 @@ By default, the banner is only shown on the index page. To display the banner on
 
 
 &lt;p&gt;改完后make publish就能看到效果了，体会下两张图的不同：
-&lt;img alt="Alt text" src="images/banner1.PNG" /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt text" src="images/banner2.PNG" /&gt;&lt;/p&gt;
+&lt;img alt="Alt text" src="/images/banner1.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt text" src="/images/banner2.PNG" /&gt;&lt;/p&gt;
 &lt;p&gt;下图是设置为0.7的效果，上图是设置成0的透明效果。哈哈虽然前端基础为0，但这个过程中对前端增加了些了解。&lt;/p&gt;
 &lt;h3 id="_7"&gt;添加多说评论&lt;/h3&gt;
 &lt;p&gt;作为blog怎么能少的了评论呢，pelican自带的评论插件是Disqus comments， 但那是针对国外用户的，咱在局域网中上不了Facebook和Twitter，所以还是选择国内有名的评论插件——多说评论。&lt;br /&gt;

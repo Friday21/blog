@@ -253,7 +253,7 @@ Set the banner image with BANNER = '/path/to/banner.png'
 Set the subtitle text with BANNER_SUBTITLE = 'This is my subtitle'
 By default, the banner is only shown on the index page. To display the banner on all pages, set BANNER_ALL_PAGES = True  </p>
 </blockquote>
-<p>在content目录下新建文件夹<code>images</code>, 把要设置的首页头部图片放在此文件夹下，并在pelican.conf中添加 <code>BANNER = '/images/banner.png'</code>, banner.png 为图片的文件名，建议选好想要的图片后调整到适合的长宽比，用截图工具就行。我选了一张大海的图片，与上一步选的主题配合的很好。效果如下图：<img alt="Alt text" src="images/捕获.PNG" /></p>
+<p>在content目录下新建文件夹<code>images</code>, 把要设置的首页头部图片放在此文件夹下，并在pelican.conf中添加 <code>BANNER = '/images/banner.png'</code>, banner.png 为图片的文件名，建议选好想要的图片后调整到适合的长宽比，用截图工具就行。我选了一张大海的图片，与上一步选的主题配合的很好。效果如下图：<img alt="Alt text" src="/images/捕获.PNG" /></p>
 <h3 id="_6">字体</h3>
 <p>pelican默认英文字体，所以中文显示很难看！按照习惯还是调成微软雅黑舒服一点，办法如下：
 尽如Python的pelican库文件夹，编辑style.css文件我的目录是<code>/usr/local/lib/python2.7/dist-packages/pelican/themes/pelican-bootstrap3/static/css/style.css</code>
@@ -285,8 +285,8 @@ By default, the banner is only shown on the index page. To display the banner on
 
 
 <p>改完后make publish就能看到效果了，体会下两张图的不同：
-<img alt="Alt text" src="images/banner1.PNG" /></p>
-<p><img alt="Alt text" src="images/banner2.PNG" /></p>
+<img alt="Alt text" src="/images/banner1.PNG" /></p>
+<p><img alt="Alt text" src="/images/banner2.PNG" /></p>
 <p>下图是设置为0.7的效果，上图是设置成0的透明效果。哈哈虽然前端基础为0，但这个过程中对前端增加了些了解。</p>
 <h3 id="_7">添加多说评论</h3>
 <p>作为blog怎么能少的了评论呢，pelican自带的评论插件是Disqus comments， 但那是针对国外用户的，咱在局域网中上不了Facebook和Twitter，所以还是选择国内有名的评论插件——多说评论。<br />
@@ -491,13 +491,18 @@ DIRECT_TEMPLATES = (&#39;index&#39;, &#39;categories&#39;, &#39;authors&#39;, &#
             <li class="list-group-item"><a href="/tags.html"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
                 <ul class="list-group " id="tags">
                     <li class="list-group-item tag-1">
+                        <a href="/tags/maf.html">
+                            MAF
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-1">
                         <a href="/tags/pao-bu.html">
                             跑步
                         </a>
                     </li>
-                    <li class="list-group-item tag-1">
-                        <a href="/tags/maf.html">
-                            MAF
+                    <li class="list-group-item tag-4">
+                        <a href="/tags/python.html">
+                            python
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
@@ -508,11 +513,6 @@ DIRECT_TEMPLATES = (&#39;index&#39;, &#39;categories&#39;, &#39;authors&#39;, &#
                     <li class="list-group-item tag-4">
                         <a href="/tags/pelican.html">
                             pelican
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-4">
-                        <a href="/tags/python.html">
-                            python
                         </a>
                     </li>
                 </ul>
