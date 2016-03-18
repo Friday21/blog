@@ -152,8 +152,7 @@ term_ctrl(220, 170, 0.5)
 &lt;li&gt;&lt;a href="http://matplotlib.org/1.5.1/users/pyplot_tutorial.html"&gt;matplotlib官方文档&lt;/a&gt;  &lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.noneface.com/2015/10/25/EE-python-serial.html"&gt;matplotlib 实时绘图&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/hinnefe2/keithley"&gt;github上的Keithley程序&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary><category term="python"></category><category term="Keithley"></category></entry><entry><title>Ubuntu下Pelican + Apache 搭建个人博客</title><link href="/blog/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA.html" rel="alternate"></link><updated>2016-03-05T00:00:00+08:00</updated><author><name>Friday</name></author><id>tag:,2016-03-03:blog/博客搭建.html</id><summary type="html">&lt;h1 id="ubuntupelican-apache"&gt;Ubuntu下Pelican + Apache 搭建个人博客&lt;/h1&gt;
-&lt;h2 id="_1"&gt;搭建环境&lt;/h2&gt;
+&lt;/ul&gt;</summary><category term="python"></category><category term="Keithley"></category></entry><entry><title>Ubuntu下Pelican + Apache 搭建个人博客</title><link href="/blog/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA.html" rel="alternate"></link><updated>2016-03-05T00:00:00+08:00</updated><author><name>Friday</name></author><id>tag:,2016-03-03:blog/博客搭建.html</id><summary type="html">&lt;h2 id="_1"&gt;搭建环境&lt;/h2&gt;
 &lt;p&gt;Ubuntu 14.04 LTS
 Pelican 3.3.0
 Apache 2.4.0
