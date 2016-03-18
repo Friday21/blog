@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>About me - 我的精神家园</title>
+    <title>Keithley - 我的精神家园</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -10,16 +10,16 @@
 
 
 
-<link rel="canonical" href="/about-me.html">
 
-        <meta name="author" content="Friday" />
-        <meta name="description" content="我是李东勇，清华大学物理系在读硕士。我认为低智、偏执、思想贫乏是最大的邪恶，无知是罪，罪不可恕，此生致力于不断丰富自己的认知，做一个有趣的人。 须知参差多态，乃是幸福的本源。 ——罗素" />
+    <meta name="author" content="Friday" />
+    <meta name="keywords" content="Keithley" />
 
-    <meta property="og:site_name" content="我的精神家园" />
-    <meta property="og:type" content="article"/>
-    <meta property="og:title" content="About me"/>
-    <meta property="og:url" content="/about-me.html"/>
-    <meta property="og:description" content="我是李东勇，清华大学物理系在读硕士。我认为低智、偏执、思想贫乏是最大的邪恶，无知是罪，罪不可恕，此生致力于不断丰富自己的认知，做一个有趣的人。 须知参差多态，乃是幸福的本源。 ——罗素" />
+    <!-- Open Graph tags -->
+        <meta property="og:site_name" content="我的精神家园" />
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" content="我的精神家园"/>
+        <meta property="og:url" content=""/>
+        <meta property="og:description" content="我的精神家园"/>
 
 
     <!-- Bootstrap -->
@@ -51,7 +51,7 @@
         </div>
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
-                         <li class="active"><a href="/about-me.html">
+                         <li><a href="/about-me.html">
                              About me
                           </a></li>
             </ul>
@@ -73,16 +73,20 @@
     <div class="row">
         <div class="col-sm-9">
 
-    <section id="content" class="body">
-        <h1 class="entry-title">About me</h1>
-        
-        <div class="entry-content">
-            <p>我是李东勇，清华大学物理系在读硕士。我认为低智、偏执、思想贫乏是最大的邪恶，无知是罪，罪不可恕，此生致力于不断丰富自己的认知，做一个有趣的人。  </p>
-<blockquote>
-<p>须知参差多态，乃是幸福的本源。            ——罗素</p>
-</blockquote>
-        </div>
-    </section>
+            <article>
+                <h2><a href="/blog/Keithley的Python控制程序.html">用Python控制Keithley测量仪器</a></h2>
+                <div class="summary"><h1 id="_1">背景</h1>
+<p>作为一名凝聚态物理学生，做科研的大部分时间都在和各种测量仪器打交道，我最常用的要数Keithley 2400, 2410等测量电信号的仪器了，Keithley仪器的分辨率还是很高的，2400测量电压和电流都能精确到纳(10^-9)的量级，6517更是能达到皮（10^-12）的量级, 非常了不起。实验室用来控制这几台仪器的程序都是Labview程序，属于G语言吧，研一刚进实验室的时候师姐给我讲了一个多小时才给我讲明白一个简单测量IV的程序流程，研一寒假前为了能够实现Labview调用的子程序中的一个参数能够在图表上实时显示，费了老大劲了，虽然最终实现了，但现在基本忘记怎么做的了，总之很复杂。看一下Labview的程序（其实就是画图啦）：
+<img alt="Alt text" src="/images/前面板.PNG" />
+<img alt="Alt text" src="/images/后面板.PNG" /></p>
+<p>前面板UI还好，但后面板程序图真是太不具有可读性啦，扩展性也很差，想添加个新功能得画半天图，于是我想如果能用Python控制这些测量仪器就好啦，这样就可以把每个测量功能封装成一个函数，需要扩展新功能的话直接调用再修改就好啦，抱着试试看的态度（买了一疗程）在github上搜索Keithley真的搜出来几条Python写的控制程序，好开心，于是下定决心把自己常用的几个Labview测量程序Python化！</p>
+<h1 id="1">1. 环境搭建</h1>
+<p>首先是接口的连接，要通过Python连接上GPIB接口需要对应的库，这里用到的是pyvisa, 官方教程在<a href="https://pyvisa.readthedocs.org/en/stable/">这里</a>, 我用的Python IDE是pycharm，所以直接在pycharm上搜索安装pyvisa就好了（真的很方便），但根据pyvisa的说明还需要安装 ...</p>
+                    <a class="btn btn-default btn-xs" href="/blog/Keithley的Python控制程序.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+
         </div>
         <div class="col-sm-3" id="sidebar">
             <aside>
