@@ -14,7 +14,7 @@ VPS：  digital ocean SFO（非必须，可已选择github page）
 &lt;code&gt;pelican-quickstart&lt;/code&gt;
 之后终端会问几个问题，一路默认回车就行（有一个要填一下，不过这些都可以在后来生成的pelicanconf.py文件中修改的）&lt;br /&gt;
 生成的目录结构如下：&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;blog/
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;blog/
 ├── content                # 存放输入的markdown或RST源文件
 │   └── (pages)            # 存放手工创建的静态页面，可选
 │   └── (posts)            # 存放手工创建的文章，可选
@@ -22,7 +22,10 @@ VPS：  digital ocean SFO（非必须，可已选择github page）
 ├── develop_server.sh      # 测试服务器
 ├── Makefile               # 管理博客的Makefile
 ├── pelicanconf.py         # 配置文件
-└── publishconf.py         # 发布文件，可删除&lt;/code&gt;&lt;/p&gt;
+└── publishconf.py         # 发布文件，可删除
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;h2 id="_3"&gt;主题和插件&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;克隆主题到本地
