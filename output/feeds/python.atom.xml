@@ -151,5 +151,6 @@ term_ctrl(220, 170, 0.5)
 &lt;li&gt;&lt;a href="https://pyvisa.readthedocs.org/en/stable/"&gt;pyvisa 官方文档&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://matplotlib.org/1.5.1/users/pyplot_tutorial.html"&gt;matplotlib官方文档&lt;/a&gt;  &lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.noneface.com/2015/10/25/EE-python-serial.html"&gt;matplotlib 实时绘图&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/hinnefe2/keithley"&gt;github上的Keithley程序&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary><category term="python"></category><category term="Keithley"></category></entry></feed>
+&lt;li&gt;&lt;a href="https://github.com/hinnefe2/keithley"&gt;github上的Keithley程序&lt;/a&gt;  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;本文讲到的程序可以在&lt;a href="https://github.com/Friday21/Keithley_measure"&gt;这里&lt;/a&gt;找到源代码&lt;/p&gt;</summary><category term="python"></category><category term="Keithley"></category></entry></feed>
