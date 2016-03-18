@@ -244,7 +244,7 @@ $ sudo service apache2 restart
 <p>成功后需要在godaday上将你的域名连接到服务器上的ip， 在DNS ZONE FILE下添加一天A记录，HOST：@，POINTS TO: 你的服务器IP，等待一段时间后就可以通过你的域名来访问你的blog啦！</p>
 <h2 id="_5">进一步完善博客</h2>
 <h3 id="bootstrap">bootstrap主题</h3>
-<p>bootstrap下还细分有很多主题，免费的可以在<a href="http://bootswatch.com/">这里</a>看到，我选的是Cerulean, 舒服的蓝色主题，只需要在pelicanconf.py中添加<code>BOOTSTRAP_THEME = 'cerulean'</code>, 然后在blog目录下make publish 就会生效了</p>
+<p>bootstrap下还细分有很多主题，免费的可以在<a href="http://bootswatch.com/">这里</a>看到，我选的是Cerulean, 舒服的蓝色主题，只需要在pelicanconf.py中添加<code>BOOTSTRAP_THEME = 'cerulean'</code>, 然后在blog目录下make publish 就会生效了  </p>
 <h3 id="banner">banner</h3>
 <p>根据DandyDev的pelican-bootstrap3的<a href="https://github.com/DandyDev/pelican-bootstrap3">文档</a>的说明：</p>
 <blockquote>
@@ -497,23 +497,18 @@ DIRECT_TEMPLATES = (&#39;index&#39;, &#39;categories&#39;, &#39;authors&#39;, &#
             <li class="list-group-item"><a href="/tags.html"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
                 <ul class="list-group " id="tags">
                     <li class="list-group-item tag-1">
-                        <a href="/tags/maf.html">
-                            MAF
+                        <a href="/tags/pao-bu.html">
+                            跑步
                         </a>
                     </li>
                     <li class="list-group-item tag-1">
-                        <a href="/tags/pao-bu.html">
-                            跑步
+                        <a href="/tags/maf.html">
+                            MAF
                         </a>
                     </li>
                     <li class="list-group-item tag-2">
                         <a href="/tags/python.html">
                             python
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-4">
-                        <a href="/tags/nba.html">
-                            NBA
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
@@ -524,6 +519,11 @@ DIRECT_TEMPLATES = (&#39;index&#39;, &#39;categories&#39;, &#39;authors&#39;, &#
                     <li class="list-group-item tag-4">
                         <a href="/tags/pelican.html">
                             pelican
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="/tags/nba.html">
+                            NBA
                         </a>
                     </li>
                 </ul>

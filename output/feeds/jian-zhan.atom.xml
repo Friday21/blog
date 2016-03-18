@@ -135,7 +135,7 @@ $ sudo service apache2 restart
 &lt;p&gt;成功后需要在godaday上将你的域名连接到服务器上的ip， 在DNS ZONE FILE下添加一天A记录，HOST：@，POINTS TO: 你的服务器IP，等待一段时间后就可以通过你的域名来访问你的blog啦！&lt;/p&gt;
 &lt;h2 id="_5"&gt;进一步完善博客&lt;/h2&gt;
 &lt;h3 id="bootstrap"&gt;bootstrap主题&lt;/h3&gt;
-&lt;p&gt;bootstrap下还细分有很多主题，免费的可以在&lt;a href="http://bootswatch.com/"&gt;这里&lt;/a&gt;看到，我选的是Cerulean, 舒服的蓝色主题，只需要在pelicanconf.py中添加&lt;code&gt;BOOTSTRAP_THEME = 'cerulean'&lt;/code&gt;, 然后在blog目录下make publish 就会生效了&lt;/p&gt;
+&lt;p&gt;bootstrap下还细分有很多主题，免费的可以在&lt;a href="http://bootswatch.com/"&gt;这里&lt;/a&gt;看到，我选的是Cerulean, 舒服的蓝色主题，只需要在pelicanconf.py中添加&lt;code&gt;BOOTSTRAP_THEME = 'cerulean'&lt;/code&gt;, 然后在blog目录下make publish 就会生效了  &lt;/p&gt;
 &lt;h3 id="banner"&gt;banner&lt;/h3&gt;
 &lt;p&gt;根据DandyDev的pelican-bootstrap3的&lt;a href="https://github.com/DandyDev/pelican-bootstrap3"&gt;文档&lt;/a&gt;的说明：&lt;/p&gt;
 &lt;blockquote&gt;
