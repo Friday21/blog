@@ -152,24 +152,7 @@ term_ctrl(220, 170, 0.5)
 &lt;li&gt;&lt;a href="http://matplotlib.org/1.5.1/users/pyplot_tutorial.html"&gt;matplotlib官方文档&lt;/a&gt;  &lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.noneface.com/2015/10/25/EE-python-serial.html"&gt;matplotlib 实时绘图&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/hinnefe2/keithley"&gt;github上的Keithley程序&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary><category term="python"></category><category term="Keithley"></category></entry><entry><title>Ubuntu下Pelican + Apache 搭建个人博客</title><link href="/blog/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA.html" rel="alternate"></link><updated>2016-03-05T00:00:00+08:00</updated><author><name>Friday</name></author><id>tag:,2016-03-03:blog/博客搭建.html</id><summary type="html">&lt;p&gt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt; HEAD&lt;/p&gt;
-&lt;h1 id="ubuntupelican-apache"&gt;Ubuntu下Pelican + Apache 搭建个人博客&lt;/h1&gt;
-&lt;p&gt;=======&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;origin/master&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
+&lt;/ul&gt;</summary><category term="python"></category><category term="Keithley"></category></entry><entry><title>Ubuntu下Pelican + Apache 搭建个人博客</title><link href="/blog/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA.html" rel="alternate"></link><updated>2016-03-05T00:00:00+08:00</updated><author><name>Friday</name></author><id>tag:,2016-03-03:blog/博客搭建.html</id><summary type="html">&lt;h1 id="ubuntupelican-apache"&gt;Ubuntu下Pelican + Apache 搭建个人博客&lt;/h1&gt;
 &lt;h2 id="_1"&gt;搭建环境&lt;/h2&gt;
 &lt;p&gt;Ubuntu 14.04 LTS
 Pelican 3.3.0
@@ -315,25 +298,7 @@ Set the banner image with BANNER = '/path/to/banner.png'
 Set the subtitle text with BANNER_SUBTITLE = 'This is my subtitle'
 By default, the banner is only shown on the index page. To display the banner on all pages, set BANNER_ALL_PAGES = True  &lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt; HEAD
-在content目录下新建文件夹&lt;code&gt;images&lt;/code&gt;, 把要设置的首页头部图片放在此文件夹下，并在pelican.conf中添加 &lt;code&gt;BANNER = '/images/banner.png'&lt;/code&gt;, banner.png 为图片的文件名，建议选好想要的图片后调整到适合的长宽比，用截图工具就行。我选了一张大海的图片，与上一步选的主题配合的很好。效果如下图：&lt;img alt="Alt text" src="images/捕获.PNG" /&gt;
-=======
-在content目录下新建文件夹&lt;code&gt;images&lt;/code&gt;, 把要设置的首页头部图片放在此文件夹下，并在pelican.conf中添加 &lt;code&gt;BANNER = '/images/banner.png'&lt;/code&gt;, banner.png 为图片的文件名，建议选好想要的图片后调整到适合的长宽比，用截图工具就行。我选了一张大海的图片，与上一步选的主题配合的很好。效果如下图：&lt;img alt="Alt text" src="/images/捕获.PNG" /&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;origin/master&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;在content目录下新建文件夹&lt;code&gt;images&lt;/code&gt;, 把要设置的首页头部图片放在此文件夹下，并在pelican.conf中添加 &lt;code&gt;BANNER = '/images/banner.png'&lt;/code&gt;, banner.png 为图片的文件名，建议选好想要的图片后调整到适合的长宽比，用截图工具就行。我选了一张大海的图片，与上一步选的主题配合的很好。效果如下图：&lt;img alt="Alt text" src="/images/捕获.PNG" /&gt;&lt;/p&gt;
 &lt;h3 id="_6"&gt;字体&lt;/h3&gt;
 &lt;p&gt;pelican默认英文字体，所以中文显示很难看！按照习惯还是调成微软雅黑舒服一点，办法如下：
 尽如Python的pelican库文件夹，编辑style.css文件我的目录是&lt;code&gt;/usr/local/lib/python2.7/dist-packages/pelican/themes/pelican-bootstrap3/static/css/style.css&lt;/code&gt;
@@ -364,29 +329,11 @@ By default, the banner is only shown on the index page. To display the banner on
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;改完后make publish就能看到效果了，体会下两张图的不同：
-&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt; HEAD
-&lt;img alt="Alt text" src="images/banner1.PNG" /&gt;&lt;/p&gt;
-&lt;h1 id="_7"&gt;&lt;img alt="Alt text" src="images/banner2.PNG" /&gt;&lt;/h1&gt;
+&lt;p&gt;改完后make publish就能看到效果了，体会下两张图的不同：&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Alt text" src="/images/banner1.PNG" /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Alt text" src="/images/banner2.PNG" /&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;origin/master&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
 &lt;p&gt;下图是设置为0.7的效果，上图是设置成0的透明效果。哈哈虽然前端基础为0，但这个过程中对前端增加了些了解。&lt;/p&gt;
-&lt;h3 id="_8"&gt;添加多说评论&lt;/h3&gt;
+&lt;h3 id="_7"&gt;添加多说评论&lt;/h3&gt;
 &lt;p&gt;作为blog怎么能少的了评论呢，pelican自带的评论插件是Disqus comments， 但那是针对国外用户的，咱在局域网中上不了Facebook和Twitter，所以还是选择国内有名的评论插件——多说评论。&lt;br /&gt;
 首先需要在&lt;a href="http://duoshuo.com/"&gt;多说&lt;/a&gt;的网站上注册，绑定网站信息，获取js代码，并根据提示修改成如下代码：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c"&gt;&amp;lt;!-- 多说评论框 start --&amp;gt;&lt;/span&gt;
@@ -535,7 +482,7 @@ DIRECT_TEMPLATES = (&amp;#39;index&amp;#39;, &amp;#39;categories&amp;#39;, &amp;
 
 
 &lt;p&gt;make publish 生效，但是&lt;strong&gt;局域网&lt;/strong&gt;内上不了Google，所以搜索功能只能翻墙使用，但对我来说不算问题，blog搜索功能主要还是自己用&lt;/p&gt;
-&lt;h3 id="_9"&gt;参考文章&lt;/h3&gt;
+&lt;h3 id="_8"&gt;参考文章&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;a href="http://guozhongxin.com/pages/2014/09/25/build_blog_with_pelican.html"&gt;谷歌站内搜索&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.lyon0804.com/zai-pelicanzhong-shi-yong-duo-shuo.html"&gt;添加多说评论&lt;/a&gt;&lt;/li&gt;
