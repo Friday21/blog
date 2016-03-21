@@ -154,23 +154,23 @@ VPS：  digital ocean SFO（非必须，可已选择github page）
 <h2 id="pelicanconfpy">配置pelicanconf.py</h2>
 <p>博客的很多内容都是在<code>/var/www/blog/pelicancof.py</code>文件中配置的</p>
 <div class="highlight"><pre><span></span><span class="n">AUTHOR</span> <span class="o">=</span> <span class="s1">u&#39;Friday&#39;</span>
-<span class="n">SITENAME</span> <span class="o">=</span> <span class="s1">u&#39;</span><span class="se">\u6211\u7684\u7cbe\u795e\u5bb6\u56ed</span><span class="s1">&#39;</span> <span class="err">博客名字</span>
+<span class="n">SITENAME</span> <span class="o">=</span> <span class="s1">u&#39;</span><span class="se">\u6211\u7684\u7cbe\u795e\u5bb6\u56ed</span><span class="s1">&#39;</span> <span class="c1">#博客名字</span>
 <span class="n">SITEURL</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:80&#39;</span> 
-<span class="n">TIMEZONE</span> <span class="o">=</span> <span class="s1">&#39;Asia/Shanghai&#39;</span> <span class="err">时区改成上海</span>
-<span class="n">THEME</span> <span class="o">=</span> <span class="s1">&#39;pelican-bootstrap3&#39;</span><span class="err">主题设置为</span><span class="n">pelican</span><span class="o">-</span><span class="n">bootstrap3</span>
+<span class="n">TIMEZONE</span> <span class="o">=</span> <span class="s1">&#39;Asia/Shanghai&#39;</span> <span class="c1">#时区改成上海</span>
+<span class="n">THEME</span> <span class="o">=</span> <span class="s1">&#39;pelican-bootstrap3&#39;</span> <span class="c1">#主题设置为pelican-bootstrap3</span>
 
-<span class="err">添加社交账号</span>
+<span class="c1">#添加社交账号</span>
 <span class="n">SOCIAL</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;facebook&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.facebook.com/li.dongyong?ref=bookmarks&#39;</span><span class="p">),</span>
           <span class="p">(</span><span class="s1">&#39;twitter&#39;</span><span class="p">,</span><span class="s1">&#39;https://twitter.com/dongyongli&#39;</span><span class="p">),</span>
           <span class="p">(</span><span class="s1">&#39;github&#39;</span><span class="p">,</span><span class="s1">&#39;https://github.com/Friday21&#39;</span><span class="p">),)</span>
 
-<span class="n">DEFAULT_PAGINATION</span> <span class="o">=</span> <span class="mi">5</span> <span class="err">每页显示</span><span class="mi">5</span><span class="err">篇文章</span>
+<span class="n">DEFAULT_PAGINATION</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1">#每页显示5篇文章</span>
 
-<span class="n">PLUGIN_PATHS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">u&#39;pelican-plugins&#39;</span><span class="p">,]</span><span class="err">插件地址，因为插件放在了和</span><span class="n">blog</span><span class="err">同级目录，所以可以</span>       <span class="err">直接用</span><span class="n">pelican</span><span class="o">-</span><span class="n">plugins</span><span class="p">,</span> <span class="err">若放在其他地方改成相应路径即可</span>
+<span class="n">PLUGIN_PATHS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">u&#39;pelican-plugins&#39;</span><span class="p">,]</span> <span class="c1">#插件地址，因为插件放在了和blog同级目录，所以可以       直接用pelican-plugins, #若放在其他地方改成相应路径即可</span>
 <span class="n">PLUGINS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sitemap&#39;</span><span class="p">,</span> <span class="s1">&#39;related_posts&#39;</span><span class="p">,</span> <span class="s1">&#39;random_article&#39;</span><span class="p">,</span>
            <span class="s1">&#39;liquid_tags.img&#39;</span><span class="p">,</span> <span class="s1">&#39;liquid_tags.video&#39;</span><span class="p">,</span>
            <span class="s1">&#39;liquid_tags.youtube&#39;</span><span class="p">,</span> <span class="s1">&#39;liquid_tags.vimeo&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;liquid_tags.include_code&#39;</span><span class="p">,</span><span class="s1">&#39;tag_cloud&#39;</span><span class="p">,</span><span class="s1">&#39;tipue_search&#39;</span><span class="p">]</span><span class="err">使用到的插件</span>
+           <span class="s1">&#39;liquid_tags.include_code&#39;</span><span class="p">,</span><span class="s1">&#39;tag_cloud&#39;</span><span class="p">,</span><span class="s1">&#39;tipue_search&#39;</span><span class="p">]</span><span class="c1">#使用到的插件</span>
 <span class="n">RANDOM</span> <span class="o">=</span> <span class="s1">&#39;random.html&#39;</span>
 <span class="n">RELATED_POSTS_MAX</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">DIRECT_TEMPLATES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;categories&#39;</span><span class="p">,</span> <span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="s1">&#39;archives&#39;</span><span class="p">,</span> <span class="s1">&#39;tags&#39;</span><span class="p">,</span><span class="s1">&#39;search&#39;</span><span class="p">)</span>
@@ -182,13 +182,13 @@ VPS：  digital ocean SFO（非必须，可已选择github page）
 <span class="n">TAG_SAVE_AS</span> <span class="o">=</span> <span class="s1">&#39;tags/{slug}.html&#39;</span>
 <span class="n">TAGS_URL</span> <span class="o">=</span> <span class="s1">&#39;tags.html&#39;</span>
 <span class="n">DISPLAY_CATEGORIES_ON_MENU</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="n">DISPLAY_CATEGORIES_ON_SIDEBAR</span> <span class="o">=</span> <span class="bp">False</span> <span class="err">不显示</span><span class="n">categories</span><span class="err">（感觉有</span><span class="n">tags</span><span class="err">就够了）</span>
-<span class="n">DISPLAY_TAGS_ON_SIDEBAR</span> <span class="o">=</span> <span class="bp">True</span> <span class="err">在边上显示标签栏</span>
+<span class="n">DISPLAY_CATEGORIES_ON_SIDEBAR</span> <span class="o">=</span> <span class="bp">False</span> <span class="c1">#不显示categories（感觉有tags就够了）</span>
+<span class="n">DISPLAY_TAGS_ON_SIDEBAR</span> <span class="o">=</span> <span class="bp">True</span> <span class="c1">#在边上显示标签栏</span>
 </pre></div>
 
 
 <h2 id="_4">发布第一篇博客</h2>
-<p>用markdown写下第一篇文章，开头要包含以下内容：</p>
+<h1 id="markdown">用markdown写下第一篇文章，开头要包含以下内容：</h1>
 <div class="highlight"><pre><span></span><span class="n">Title</span><span class="p">:</span> <span class="n">My</span> <span class="nb">super</span> <span class="n">title</span> <span class="err">必须</span>
 <span class="n">Date</span><span class="p">:</span> <span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mo">03</span> <span class="mi">10</span><span class="p">:</span><span class="mi">20</span> <span class="err">必须</span>
 <span class="n">Modified</span><span class="p">:</span> <span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mo">05</span> <span class="mi">19</span><span class="p">:</span><span class="mi">30</span>
@@ -231,12 +231,12 @@ git push -u origin master
 <span class="o">&lt;</span><span class="n">VirtualHost</span> <span class="o">*</span><span class="p">:</span><span class="mi">80</span><span class="o">&gt;</span>
     <span class="c1"># Admin email, Server Name (domain name) and any aliases</span>
     <span class="n">ServerAdmin</span> <span class="n">lidongyong22</span><span class="nd">@gmail.com</span> 
-    <span class="n">ServerName</span>  <span class="n">fridayhaohao</span><span class="o">.</span><span class="n">com</span> <span class="err">服务器名字</span>
+    <span class="n">ServerName</span>  <span class="n">fridayhaohao</span><span class="o">.</span><span class="n">com</span> <span class="c1">#服务器名字</span>
     <span class="n">ServerAlias</span> <span class="n">www</span><span class="o">.</span><span class="n">fridayhaohao</span><span class="o">.</span><span class="n">com</span> <span class="c1">#域名</span>
 
     <span class="c1"># Index file and Document Root (where the public files are located)</span>
     <span class="n">DirectoryIndex</span> <span class="n">index</span><span class="o">.</span><span class="n">php</span> <span class="n">index</span><span class="o">.</span><span class="n">html</span>
-    <span class="n">DocumentRoot</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span><span class="n">output</span> <span class="err">文件目录</span>
+    <span class="n">DocumentRoot</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span><span class="n">output</span> <span class="c1">#文件目录</span>
 <span class="o">&lt;/</span><span class="n">VirtualHost</span><span class="o">&gt;</span>
 </pre></div>
 

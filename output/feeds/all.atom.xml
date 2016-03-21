@@ -319,23 +319,23 @@ VPS：  digital ocean SFO（非必须，可已选择github page）
 &lt;h2 id="pelicanconfpy"&gt;配置pelicanconf.py&lt;/h2&gt;
 &lt;p&gt;博客的很多内容都是在&lt;code&gt;/var/www/blog/pelicancof.py&lt;/code&gt;文件中配置的&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;AUTHOR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;u&amp;#39;Friday&amp;#39;&lt;/span&gt;
-&lt;span class="n"&gt;SITENAME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;u&amp;#39;&lt;/span&gt;&lt;span class="se"&gt;\u6211\u7684\u7cbe\u795e\u5bb6\u56ed&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt; &lt;span class="err"&gt;博客名字&lt;/span&gt;
+&lt;span class="n"&gt;SITENAME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;u&amp;#39;&lt;/span&gt;&lt;span class="se"&gt;\u6211\u7684\u7cbe\u795e\u5bb6\u56ed&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;#博客名字&lt;/span&gt;
 &lt;span class="n"&gt;SITEURL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http://localhost:80&amp;#39;&lt;/span&gt; 
-&lt;span class="n"&gt;TIMEZONE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Asia/Shanghai&amp;#39;&lt;/span&gt; &lt;span class="err"&gt;时区改成上海&lt;/span&gt;
-&lt;span class="n"&gt;THEME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;pelican-bootstrap3&amp;#39;&lt;/span&gt;&lt;span class="err"&gt;主题设置为&lt;/span&gt;&lt;span class="n"&gt;pelican&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;bootstrap3&lt;/span&gt;
+&lt;span class="n"&gt;TIMEZONE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Asia/Shanghai&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;#时区改成上海&lt;/span&gt;
+&lt;span class="n"&gt;THEME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;pelican-bootstrap3&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;#主题设置为pelican-bootstrap3&lt;/span&gt;
 
-&lt;span class="err"&gt;添加社交账号&lt;/span&gt;
+&lt;span class="c1"&gt;#添加社交账号&lt;/span&gt;
 &lt;span class="n"&gt;SOCIAL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;facebook&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https://www.facebook.com/li.dongyong?ref=bookmarks&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
           &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;twitter&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;https://twitter.com/dongyongli&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
           &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;github&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;https://github.com/Friday21&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),)&lt;/span&gt;
 
-&lt;span class="n"&gt;DEFAULT_PAGINATION&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="err"&gt;每页显示&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="err"&gt;篇文章&lt;/span&gt;
+&lt;span class="n"&gt;DEFAULT_PAGINATION&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="c1"&gt;#每页显示5篇文章&lt;/span&gt;
 
-&lt;span class="n"&gt;PLUGIN_PATHS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;pelican-plugins&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,]&lt;/span&gt;&lt;span class="err"&gt;插件地址，因为插件放在了和&lt;/span&gt;&lt;span class="n"&gt;blog&lt;/span&gt;&lt;span class="err"&gt;同级目录，所以可以&lt;/span&gt;       &lt;span class="err"&gt;直接用&lt;/span&gt;&lt;span class="n"&gt;pelican&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;plugins&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="err"&gt;若放在其他地方改成相应路径即可&lt;/span&gt;
+&lt;span class="n"&gt;PLUGIN_PATHS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;pelican-plugins&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,]&lt;/span&gt; &lt;span class="c1"&gt;#插件地址，因为插件放在了和blog同级目录，所以可以       直接用pelican-plugins, #若放在其他地方改成相应路径即可&lt;/span&gt;
 &lt;span class="n"&gt;PLUGINS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;sitemap&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;related_posts&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;random_article&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
            &lt;span class="s1"&gt;&amp;#39;liquid_tags.img&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;liquid_tags.video&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
            &lt;span class="s1"&gt;&amp;#39;liquid_tags.youtube&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;liquid_tags.vimeo&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-           &lt;span class="s1"&gt;&amp;#39;liquid_tags.include_code&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;tag_cloud&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;tipue_search&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="err"&gt;使用到的插件&lt;/span&gt;
+           &lt;span class="s1"&gt;&amp;#39;liquid_tags.include_code&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;tag_cloud&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;tipue_search&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;#使用到的插件&lt;/span&gt;
 &lt;span class="n"&gt;RANDOM&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;random.html&amp;#39;&lt;/span&gt;
 &lt;span class="n"&gt;RELATED_POSTS_MAX&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
 &lt;span class="n"&gt;DIRECT_TEMPLATES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;index&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;categories&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;authors&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;archives&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;tags&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;search&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -347,13 +347,13 @@ VPS：  digital ocean SFO（非必须，可已选择github page）
 &lt;span class="n"&gt;TAG_SAVE_AS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;tags/{slug}.html&amp;#39;&lt;/span&gt;
 &lt;span class="n"&gt;TAGS_URL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;tags.html&amp;#39;&lt;/span&gt;
 &lt;span class="n"&gt;DISPLAY_CATEGORIES_ON_MENU&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
-&lt;span class="n"&gt;DISPLAY_CATEGORIES_ON_SIDEBAR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt; &lt;span class="err"&gt;不显示&lt;/span&gt;&lt;span class="n"&gt;categories&lt;/span&gt;&lt;span class="err"&gt;（感觉有&lt;/span&gt;&lt;span class="n"&gt;tags&lt;/span&gt;&lt;span class="err"&gt;就够了）&lt;/span&gt;
-&lt;span class="n"&gt;DISPLAY_TAGS_ON_SIDEBAR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt; &lt;span class="err"&gt;在边上显示标签栏&lt;/span&gt;
+&lt;span class="n"&gt;DISPLAY_CATEGORIES_ON_SIDEBAR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt; &lt;span class="c1"&gt;#不显示categories（感觉有tags就够了）&lt;/span&gt;
+&lt;span class="n"&gt;DISPLAY_TAGS_ON_SIDEBAR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt; &lt;span class="c1"&gt;#在边上显示标签栏&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;h2 id="_4"&gt;发布第一篇博客&lt;/h2&gt;
-&lt;p&gt;用markdown写下第一篇文章，开头要包含以下内容：&lt;/p&gt;
+&lt;h1 id="markdown"&gt;用markdown写下第一篇文章，开头要包含以下内容：&lt;/h1&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Title&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;My&lt;/span&gt; &lt;span class="nb"&gt;super&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt; &lt;span class="err"&gt;必须&lt;/span&gt;
 &lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2010&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;03&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt; &lt;span class="err"&gt;必须&lt;/span&gt;
 &lt;span class="n"&gt;Modified&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2010&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;05&lt;/span&gt; &lt;span class="mi"&gt;19&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;
@@ -396,12 +396,12 @@ git push -u origin master
 &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;VirtualHost&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;80&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
     &lt;span class="c1"&gt;# Admin email, Server Name (domain name) and any aliases&lt;/span&gt;
     &lt;span class="n"&gt;ServerAdmin&lt;/span&gt; &lt;span class="n"&gt;lidongyong22&lt;/span&gt;&lt;span class="nd"&gt;@gmail.com&lt;/span&gt; 
-    &lt;span class="n"&gt;ServerName&lt;/span&gt;  &lt;span class="n"&gt;fridayhaohao&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt; &lt;span class="err"&gt;服务器名字&lt;/span&gt;
+    &lt;span class="n"&gt;ServerName&lt;/span&gt;  &lt;span class="n"&gt;fridayhaohao&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt; &lt;span class="c1"&gt;#服务器名字&lt;/span&gt;
     &lt;span class="n"&gt;ServerAlias&lt;/span&gt; &lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fridayhaohao&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt; &lt;span class="c1"&gt;#域名&lt;/span&gt;
 
     &lt;span class="c1"&gt;# Index file and Document Root (where the public files are located)&lt;/span&gt;
     &lt;span class="n"&gt;DirectoryIndex&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;php&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;html&lt;/span&gt;
-    &lt;span class="n"&gt;DocumentRoot&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;blog&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="err"&gt;文件目录&lt;/span&gt;
+    &lt;span class="n"&gt;DocumentRoot&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;blog&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="c1"&gt;#文件目录&lt;/span&gt;
 &lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;VirtualHost&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
