@@ -126,15 +126,15 @@ VPS：  digital ocean SFO（非必须，可已选择github page）
 <code>pelican-quickstart</code>
 之后终端会问几个问题，一路默认回车就行（有一个要填一下，不过这些都可以在后来生成的pelicanconf.py文件中修改的）<br />
 生成的目录结构如下：</p>
-<div class="highlight"><pre><span></span>blog/
-├── content                # 存放输入的markdown或RST源文件
-│   └── (pages)            # 存放手工创建的静态页面，可选
-│   └── (posts)            # 存放手工创建的文章，可选
-├── output                 # 存放最终生成的静态博客
-├── develop_server.sh      # 测试服务器
-├── Makefile               # 管理博客的Makefile
-├── pelicanconf.py         # 配置文件
-└── publishconf.py         # 发布文件，可删除
+<div class="highlight"><pre><span></span><span class="n">blog</span><span class="o">/</span>
+<span class="err">├──</span> <span class="n">content</span>                <span class="c1"># 存放输入的markdown或RST源文件</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="p">(</span><span class="n">pages</span><span class="p">)</span>            <span class="c1"># 存放手工创建的静态页面，可选</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="p">(</span><span class="n">posts</span><span class="p">)</span>            <span class="c1"># 存放手工创建的文章，可选</span>
+<span class="err">├──</span> <span class="n">output</span>                 <span class="c1"># 存放最终生成的静态博客</span>
+<span class="err">├──</span> <span class="n">develop_server</span><span class="o">.</span><span class="n">sh</span>      <span class="c1"># 测试服务器</span>
+<span class="err">├──</span> <span class="n">Makefile</span>               <span class="c1"># 管理博客的Makefile</span>
+<span class="err">├──</span> <span class="n">pelicanconf</span><span class="o">.</span><span class="n">py</span>         <span class="c1"># 配置文件</span>
+<span class="err">└──</span> <span class="n">publishconf</span><span class="o">.</span><span class="n">py</span>         <span class="c1"># 发布文件，可删除</span>
 </pre></div>
 
 
@@ -153,50 +153,50 @@ VPS：  digital ocean SFO（非必须，可已选择github page）
 </ul>
 <h2 id="pelicanconfpy">配置pelicanconf.py</h2>
 <p>博客的很多内容都是在<code>/var/www/blog/pelicancof.py</code>文件中配置的</p>
-<div class="highlight"><pre><span></span>AUTHOR = u&#39;Friday&#39;
-SITENAME = u&#39;\u6211\u7684\u7cbe\u795e\u5bb6\u56ed&#39; 博客名字
-SITEURL = &#39;http://localhost:80&#39; 
-TIMEZONE = &#39;Asia/Shanghai&#39; 时区改成上海
-THEME = &#39;pelican-bootstrap3&#39;主题设置为pelican-bootstrap3
+<div class="highlight"><pre><span></span><span class="n">AUTHOR</span> <span class="o">=</span> <span class="s1">u&#39;Friday&#39;</span>
+<span class="n">SITENAME</span> <span class="o">=</span> <span class="s1">u&#39;</span><span class="se">\u6211\u7684\u7cbe\u795e\u5bb6\u56ed</span><span class="s1">&#39;</span> <span class="err">博客名字</span>
+<span class="n">SITEURL</span> <span class="o">=</span> <span class="s1">&#39;http://localhost:80&#39;</span> 
+<span class="n">TIMEZONE</span> <span class="o">=</span> <span class="s1">&#39;Asia/Shanghai&#39;</span> <span class="err">时区改成上海</span>
+<span class="n">THEME</span> <span class="o">=</span> <span class="s1">&#39;pelican-bootstrap3&#39;</span><span class="err">主题设置为</span><span class="n">pelican</span><span class="o">-</span><span class="n">bootstrap3</span>
 
-添加社交账号
-SOCIAL = ((&#39;facebook&#39;, &#39;https://www.facebook.com/li.dongyong?ref=bookmarks&#39;),
-          (&#39;twitter&#39;,&#39;https://twitter.com/dongyongli&#39;),
-          (&#39;github&#39;,&#39;https://github.com/Friday21&#39;),)
+<span class="err">添加社交账号</span>
+<span class="n">SOCIAL</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;facebook&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.facebook.com/li.dongyong?ref=bookmarks&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="s1">&#39;twitter&#39;</span><span class="p">,</span><span class="s1">&#39;https://twitter.com/dongyongli&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="s1">&#39;github&#39;</span><span class="p">,</span><span class="s1">&#39;https://github.com/Friday21&#39;</span><span class="p">),)</span>
 
-DEFAULT_PAGINATION = 5 每页显示5篇文章
+<span class="n">DEFAULT_PAGINATION</span> <span class="o">=</span> <span class="mi">5</span> <span class="err">每页显示</span><span class="mi">5</span><span class="err">篇文章</span>
 
-PLUGIN_PATHS = [u&#39;pelican-plugins&#39;,]插件地址，因为插件放在了和blog同级目录，所以可以       直接用pelican-plugins, 若放在其他地方改成相应路径即可
-PLUGINS = [&#39;sitemap&#39;, &#39;related_posts&#39;, &#39;random_article&#39;,
-           &#39;liquid_tags.img&#39;, &#39;liquid_tags.video&#39;,
-           &#39;liquid_tags.youtube&#39;, &#39;liquid_tags.vimeo&#39;,
-           &#39;liquid_tags.include_code&#39;,&#39;tag_cloud&#39;,&#39;tipue_search&#39;]使用到的插件
-RANDOM = &#39;random.html&#39;
-RELATED_POSTS_MAX = 10
-DIRECT_TEMPLATES = (&#39;index&#39;, &#39;categories&#39;, &#39;authors&#39;, &#39;archives&#39;, &#39;tags&#39;,&#39;search&#39;)
-ARTICLE_URL = &#39;blog/{slug}.html&#39;
-ARTICLE_SAVE_AS = &#39;blog/{slug}.html&#39;
-PAGE_URL = &#39;{slug}.html&#39;
-PAGE_SAVE_AS = &#39;{slug}.html&#39;
-TAG_URL = &#39;tags/{slug}.html&#39;
-TAG_SAVE_AS = &#39;tags/{slug}.html&#39;
-TAGS_URL = &#39;tags.html&#39;
-DISPLAY_CATEGORIES_ON_MENU = False
-DISPLAY_CATEGORIES_ON_SIDEBAR = False 不显示categories（感觉有tags就够了）
-DISPLAY_TAGS_ON_SIDEBAR = True 在边上显示标签栏
+<span class="n">PLUGIN_PATHS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">u&#39;pelican-plugins&#39;</span><span class="p">,]</span><span class="err">插件地址，因为插件放在了和</span><span class="n">blog</span><span class="err">同级目录，所以可以</span>       <span class="err">直接用</span><span class="n">pelican</span><span class="o">-</span><span class="n">plugins</span><span class="p">,</span> <span class="err">若放在其他地方改成相应路径即可</span>
+<span class="n">PLUGINS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sitemap&#39;</span><span class="p">,</span> <span class="s1">&#39;related_posts&#39;</span><span class="p">,</span> <span class="s1">&#39;random_article&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;liquid_tags.img&#39;</span><span class="p">,</span> <span class="s1">&#39;liquid_tags.video&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;liquid_tags.youtube&#39;</span><span class="p">,</span> <span class="s1">&#39;liquid_tags.vimeo&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;liquid_tags.include_code&#39;</span><span class="p">,</span><span class="s1">&#39;tag_cloud&#39;</span><span class="p">,</span><span class="s1">&#39;tipue_search&#39;</span><span class="p">]</span><span class="err">使用到的插件</span>
+<span class="n">RANDOM</span> <span class="o">=</span> <span class="s1">&#39;random.html&#39;</span>
+<span class="n">RELATED_POSTS_MAX</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">DIRECT_TEMPLATES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;categories&#39;</span><span class="p">,</span> <span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="s1">&#39;archives&#39;</span><span class="p">,</span> <span class="s1">&#39;tags&#39;</span><span class="p">,</span><span class="s1">&#39;search&#39;</span><span class="p">)</span>
+<span class="n">ARTICLE_URL</span> <span class="o">=</span> <span class="s1">&#39;blog/{slug}.html&#39;</span>
+<span class="n">ARTICLE_SAVE_AS</span> <span class="o">=</span> <span class="s1">&#39;blog/{slug}.html&#39;</span>
+<span class="n">PAGE_URL</span> <span class="o">=</span> <span class="s1">&#39;{slug}.html&#39;</span>
+<span class="n">PAGE_SAVE_AS</span> <span class="o">=</span> <span class="s1">&#39;{slug}.html&#39;</span>
+<span class="n">TAG_URL</span> <span class="o">=</span> <span class="s1">&#39;tags/{slug}.html&#39;</span>
+<span class="n">TAG_SAVE_AS</span> <span class="o">=</span> <span class="s1">&#39;tags/{slug}.html&#39;</span>
+<span class="n">TAGS_URL</span> <span class="o">=</span> <span class="s1">&#39;tags.html&#39;</span>
+<span class="n">DISPLAY_CATEGORIES_ON_MENU</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">DISPLAY_CATEGORIES_ON_SIDEBAR</span> <span class="o">=</span> <span class="bp">False</span> <span class="err">不显示</span><span class="n">categories</span><span class="err">（感觉有</span><span class="n">tags</span><span class="err">就够了）</span>
+<span class="n">DISPLAY_TAGS_ON_SIDEBAR</span> <span class="o">=</span> <span class="bp">True</span> <span class="err">在边上显示标签栏</span>
 </pre></div>
 
 
 <h2 id="_4">发布第一篇博客</h2>
 <p>用markdown写下第一篇文章，开头要包含以下内容：</p>
-<div class="highlight"><pre><span></span><span class="n">Title</span><span class="o">:</span> <span class="n">My</span> <span class="kd">super</span> <span class="n">title</span> <span class="err">必须</span>
-<span class="n">Date</span><span class="o">:</span> <span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">03</span> <span class="mi">10</span><span class="o">:</span><span class="mi">20</span> <span class="err">必须</span>
-<span class="n">Modified</span><span class="o">:</span> <span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">05</span> <span class="mi">19</span><span class="o">:</span><span class="mi">30</span>
-<span class="n">Category</span><span class="o">:</span> <span class="n">Python</span>
-<span class="n">Tags</span><span class="o">:</span> <span class="n">pelican</span><span class="o">,</span> <span class="n">publishing</span>
-<span class="n">Slug</span><span class="o">:</span> <span class="n">my</span><span class="o">-</span><span class="kd">super</span><span class="o">-</span><span class="n">post</span> <span class="err">必须</span>
-<span class="n">Authors</span><span class="o">:</span> <span class="n">Alexis</span> <span class="n">Metaireau</span><span class="o">,</span> <span class="n">Conan</span> <span class="n">Doyle</span>
-<span class="n">Summary</span><span class="o">:</span> <span class="n">Short</span> <span class="n">version</span> <span class="k">for</span> <span class="n">index</span> <span class="n">and</span> <span class="n">feeds</span>
+<div class="highlight"><pre><span></span><span class="n">Title</span><span class="p">:</span> <span class="n">My</span> <span class="nb">super</span> <span class="n">title</span> <span class="err">必须</span>
+<span class="n">Date</span><span class="p">:</span> <span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mo">03</span> <span class="mi">10</span><span class="p">:</span><span class="mi">20</span> <span class="err">必须</span>
+<span class="n">Modified</span><span class="p">:</span> <span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mo">05</span> <span class="mi">19</span><span class="p">:</span><span class="mi">30</span>
+<span class="n">Category</span><span class="p">:</span> <span class="n">Python</span>
+<span class="n">Tags</span><span class="p">:</span> <span class="n">pelican</span><span class="p">,</span> <span class="n">publishing</span>
+<span class="n">Slug</span><span class="p">:</span> <span class="n">my</span><span class="o">-</span><span class="nb">super</span><span class="o">-</span><span class="n">post</span> <span class="err">必须</span>
+<span class="n">Authors</span><span class="p">:</span> <span class="n">Alexis</span> <span class="n">Metaireau</span><span class="p">,</span> <span class="n">Conan</span> <span class="n">Doyle</span>
+<span class="n">Summary</span><span class="p">:</span> <span class="n">Short</span> <span class="n">version</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">and</span> <span class="n">feeds</span>
 </pre></div>
 
 
@@ -223,21 +223,21 @@ git push -u origin master
 新建blog的配置文件
 <code>vim blog.conf</code> 
 添加如下内容</p>
-<div class="highlight"><pre><span></span><span class="nt">&lt;Directory</span> <span class="err">/var/www/blog/output</span><span class="nt">&gt;</span> #博客目录
-        Options Indexes FollowSymLinks
-        AllowOverride None
-        Require all granted
-<span class="nt">&lt;/Directory&gt;</span>
-<span class="nt">&lt;VirtualHost</span> <span class="err">*:80</span><span class="nt">&gt;</span>
-    # Admin email, Server Name (domain name) and any aliases
-    ServerAdmin lidongyong22@gmail.com 
-    ServerName  fridayhaohao.com 服务器名字
-    ServerAlias www.fridayhaohao.com #域名
+<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">Directory</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span><span class="n">output</span><span class="o">&gt;</span> <span class="c1">#博客目录</span>
+        <span class="n">Options</span> <span class="n">Indexes</span> <span class="n">FollowSymLinks</span>
+        <span class="n">AllowOverride</span> <span class="bp">None</span>
+        <span class="n">Require</span> <span class="nb">all</span> <span class="n">granted</span>
+<span class="o">&lt;/</span><span class="n">Directory</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">VirtualHost</span> <span class="o">*</span><span class="p">:</span><span class="mi">80</span><span class="o">&gt;</span>
+    <span class="c1"># Admin email, Server Name (domain name) and any aliases</span>
+    <span class="n">ServerAdmin</span> <span class="n">lidongyong22</span><span class="nd">@gmail.com</span> 
+    <span class="n">ServerName</span>  <span class="n">fridayhaohao</span><span class="o">.</span><span class="n">com</span> <span class="err">服务器名字</span>
+    <span class="n">ServerAlias</span> <span class="n">www</span><span class="o">.</span><span class="n">fridayhaohao</span><span class="o">.</span><span class="n">com</span> <span class="c1">#域名</span>
 
-    # Index file and Document Root (where the public files are located)
-    DirectoryIndex index.php index.html
-    DocumentRoot /var/www/blog/output 文件目录
-<span class="nt">&lt;/VirtualHost&gt;</span>
+    <span class="c1"># Index file and Document Root (where the public files are located)</span>
+    <span class="n">DirectoryIndex</span> <span class="n">index</span><span class="o">.</span><span class="n">php</span> <span class="n">index</span><span class="o">.</span><span class="n">html</span>
+    <span class="n">DocumentRoot</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span><span class="n">output</span> <span class="err">文件目录</span>
+<span class="o">&lt;/</span><span class="n">VirtualHost</span><span class="o">&gt;</span>
 </pre></div>
 
 
@@ -298,20 +298,20 @@ By default, the banner is only shown on the index page. To display the banner on
 <p>作为blog怎么能少的了评论呢，pelican自带的评论插件是Disqus comments， 但那是针对国外用户的，咱在局域网中上不了Facebook和Twitter，所以还是选择国内有名的评论插件——多说评论。<br />
 首先需要在<a href="http://duoshuo.com/">多说</a>的网站上注册，绑定网站信息，获取js代码，并根据提示修改成如下代码：</p>
 <div class="highlight"><pre><span></span><span class="c">&lt;!-- 多说评论框 start --&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;ds-thread&quot;</span> <span class="na">data-thread-key=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">article.slug</span> <span class="cp">}}</span><span class="s">&quot;</span> <span class="na">data-title=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">article.title</span> <span class="cp">}}</span><span class="s">&quot;</span> <span class="na">data-url=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">SITEURL</span> <span class="cp">}}</span><span class="s">/</span><span class="cp">{{</span> <span class="nv">article.url</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ds-thread&quot;</span> <span class="na">data-thread-key</span><span class="o">=</span><span class="s">&quot;{{ article.slug }}&quot;</span> <span class="na">data-title</span><span class="o">=</span><span class="s">&quot;{{ article.title }}&quot;</span> <span class="na">data-url</span><span class="o">=</span><span class="s">&quot;{{ SITEURL }}/{{ article.url }}&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 <span class="c">&lt;!-- 多说评论框 end --&gt;</span>
 <span class="c">&lt;!-- 多说公共JS代码 start (一个网页只需插入一次) --&gt;</span>
-<span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
-var duoshuoQuery = {short_name:&quot;lyon0804&quot;};
-    (function() {
-        var ds = document.createElement(&#39;script&#39;);
-        ds.type = &#39;text/javascript&#39;;ds.async = true;
-        ds.src = (document.location.protocol == &#39;https:&#39; ? &#39;https:&#39; : &#39;http:&#39;) + &#39;//static.duoshuo.com/embed.js&#39;;
-        ds.charset = &#39;UTF-8&#39;;
-        (document.getElementsByTagName(&#39;head&#39;)[0]
-         || document.getElementsByTagName(&#39;body&#39;)[0]).appendChild(ds);
-    })();
-    <span class="nt">&lt;/script&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+<span class="kd">var</span> <span class="nx">duoshuoQuery</span> <span class="o">=</span> <span class="p">{</span><span class="nx">short_name</span><span class="o">:</span><span class="s2">&quot;lyon0804&quot;</span><span class="p">};</span>
+    <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">ds</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+        <span class="nx">ds</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span><span class="nx">ds</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="nx">ds</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span> <span class="o">==</span> <span class="s1">&#39;https:&#39;</span> <span class="o">?</span> <span class="s1">&#39;https:&#39;</span> <span class="o">:</span> <span class="s1">&#39;http:&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//static.duoshuo.com/embed.js&#39;</span><span class="p">;</span>
+        <span class="nx">ds</span><span class="p">.</span><span class="nx">charset</span> <span class="o">=</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">;</span>
+        <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+         <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">ds</span><span class="p">);</span>
+    <span class="p">})();</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="c">&lt;!-- 多说公共JS代码 end --&gt;</span>
 </pre></div>
 
@@ -319,28 +319,28 @@ var duoshuoQuery = {short_name:&quot;lyon0804&quot;};
 <p>尽如pelican的Python库，编辑评论模板，<br />
 <code>vim /usr/local/lib/python2.7/dist-packages/pelican/themes/pelican-bootstrap3/templates/includes/comments.html</code>
 对照着disqus评论添加如下内容：</p>
-<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">if</span> <span class="nv">DUOSHUO_SITENAME</span> <span class="cp">%}</span>
-    <span class="nt">&lt;hr/&gt;</span>
-    <span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">&quot;comments&quot;</span> <span class="na">id=</span><span class="s">&quot;comments&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;h2&gt;</span>Comments<span class="nt">&lt;/h2&gt;</span>
-        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;ds-thread&quot;</span> <span class="na">data-thread-key=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">article.slug</span> <span class="cp">}}</span><span class="s">&quot;</span> <span class="na">data-title=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">article.title</span> <span class="cp">}}</span><span class="s">&quot;</span> <span class="na">data-url=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">SITEURL</span> <span class="cp">}}</span><span class="s">/</span><span class="cp">{{</span> <span class="nv">article.url</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-        <span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
-            var duoshuoQuery = {short_name:&quot;<span class="cp">{{</span> <span class="nv">DUOSHUO_SITENAME</span> <span class="cp">}}</span>&quot;};
-            (function() {
-                var ds = document.createElement(&#39;script&#39;);
-                ds.type = &#39;text/javascript&#39;;ds.async = true;
-                ds.src = (document.location.protocol == &#39;https:&#39; ? &#39;https:&#39; : &#39;http:&#39;) + &#39;//static.duoshuo.com/embed.js&#39;;
-                ds.charset = &#39;UTF-8&#39;;
-                (document.getElementsByTagName(&#39;head&#39;)[0]
-                 || document.getElementsByTagName(&#39;body&#39;)[0]).appendChild(ds);
-            })();
-        <span class="nt">&lt;/script&gt;</span>
-        <span class="nt">&lt;noscript&gt;</span>Please enable JavaScript to view the <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://duoshuo.com/&quot;</span><span class="nt">&gt;</span>comments powered by
-        Duoshuo.<span class="nt">&lt;/a&gt;&lt;/noscript&gt;</span>
-        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://duoshuo.com&quot;</span> <span class="na">class=</span><span class="s">&quot;dsq-brlink&quot;</span><span class="nt">&gt;</span>comments powered by <span class="nt">&lt;span&gt;</span>Duoshuo<span class="nt">&lt;/span&gt;&lt;/a&gt;</span>
+<div class="highlight"><pre><span></span>{% if DUOSHUO_SITENAME %}
+    <span class="p">&lt;</span><span class="nt">hr</span><span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">section</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;comments&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;comments&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Comments<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ds-thread&quot;</span> <span class="na">data-thread-key</span><span class="o">=</span><span class="s">&quot;{{ article.slug }}&quot;</span> <span class="na">data-title</span><span class="o">=</span><span class="s">&quot;{{ article.title }}&quot;</span> <span class="na">data-url</span><span class="o">=</span><span class="s">&quot;{{ SITEURL }}/{{ article.url }}&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+            <span class="kd">var</span> <span class="nx">duoshuoQuery</span> <span class="o">=</span> <span class="p">{</span><span class="nx">short_name</span><span class="o">:</span><span class="s2">&quot;{{ DUOSHUO_SITENAME }}&quot;</span><span class="p">};</span>
+            <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">ds</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+                <span class="nx">ds</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span><span class="nx">ds</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                <span class="nx">ds</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span> <span class="o">==</span> <span class="s1">&#39;https:&#39;</span> <span class="o">?</span> <span class="s1">&#39;https:&#39;</span> <span class="o">:</span> <span class="s1">&#39;http:&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;//static.duoshuo.com/embed.js&#39;</span><span class="p">;</span>
+                <span class="nx">ds</span><span class="p">.</span><span class="nx">charset</span> <span class="o">=</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">;</span>
+                <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                 <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">ds</span><span class="p">);</span>
+            <span class="p">})();</span>
+        <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">noscript</span><span class="p">&gt;</span>Please enable JavaScript to view the <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;http://duoshuo.com/&quot;</span><span class="p">&gt;</span>comments powered by
+        Duoshuo.<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">noscript</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;http://duoshuo.com&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;dsq-brlink&quot;</span><span class="p">&gt;</span>comments powered by <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>Duoshuo<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
 
-    <span class="nt">&lt;/section&gt;</span>
-<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+    <span class="p">&lt;/</span><span class="nt">section</span><span class="p">&gt;</span>
+{% endif %}
 </pre></div>
 
 
@@ -350,11 +350,11 @@ var duoshuoQuery = {short_name:&quot;lyon0804&quot;};
 * 启用tipue_search
 在PLUGINS中添加tipue_search
 在DIRECT_TEMPLATES中添加search</p>
-<div class="highlight"><pre><span></span>PLUGINS = [&#39;sitemap&#39;, &#39;related_posts&#39;, &#39;random_article&#39;,
-           &#39;liquid_tags.img&#39;, &#39;liquid_tags.video&#39;,
-           &#39;liquid_tags.youtube&#39;, &#39;liquid_tags.vimeo&#39;,
-           &#39;liquid_tags.include_code&#39;,&#39;tag_cloud&#39;,&#39;tipue_search&#39;]
-DIRECT_TEMPLATES = (&#39;index&#39;, &#39;categories&#39;, &#39;authors&#39;, &#39;archives&#39;, &#39;tags&#39;,&#39;search&#39;)
+<div class="highlight"><pre><span></span><span class="n">PLUGINS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sitemap&#39;</span><span class="p">,</span> <span class="s1">&#39;related_posts&#39;</span><span class="p">,</span> <span class="s1">&#39;random_article&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;liquid_tags.img&#39;</span><span class="p">,</span> <span class="s1">&#39;liquid_tags.video&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;liquid_tags.youtube&#39;</span><span class="p">,</span> <span class="s1">&#39;liquid_tags.vimeo&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;liquid_tags.include_code&#39;</span><span class="p">,</span><span class="s1">&#39;tag_cloud&#39;</span><span class="p">,</span><span class="s1">&#39;tipue_search&#39;</span><span class="p">]</span>
+<span class="n">DIRECT_TEMPLATES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;categories&#39;</span><span class="p">,</span> <span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="s1">&#39;archives&#39;</span><span class="p">,</span> <span class="s1">&#39;tags&#39;</span><span class="p">,</span><span class="s1">&#39;search&#39;</span><span class="p">)</span>
 </pre></div>
 
 
