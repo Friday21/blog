@@ -5,35 +5,35 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2016-03-20T20:55:37-00:00</lastmod>
+<lastmod>2016-03-20T21:00:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2016-03-20T20:55:37-00:00</lastmod>
+<lastmod>2016-03-20T21:00:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2016-03-20T20:55:37-00:00</lastmod>
+<lastmod>2016-03-20T21:00:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2016-03-20T20:55:37-00:00</lastmod>
+<lastmod>2016-03-20T21:00:54-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/about-me.html</loc>
-<lastmod>2016-03-20T20:55:37-00:00</lastmod>
+<lastmod>2016-03-20T21:00:54-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.3</priority>
 </url>
@@ -88,15 +88,15 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>/category/duan-lian.html</loc>
-<lastmod>2016-03-21T00:00:00+08:06</lastmod>
+<loc>/category/it.html</loc>
+<lastmod>2016-03-18T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/category/jian-zhan.html</loc>
-<lastmod>2016-03-05T00:00:00+08:06</lastmod>
+<loc>/category/life.html</loc>
+<lastmod>2016-03-21T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -104,27 +104,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/category/misc.html</loc>
 <lastmod>2016-02-25T20:58:00+08:06</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>/category/python.html</loc>
-<lastmod>2016-03-18T00:00:00+08:06</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>/tags/keithley.html</loc>
-<lastmod>2016-03-18T00:00:00+08:06</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>/tags/pelican.html</loc>
-<lastmod>2016-03-05T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -144,15 +123,15 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>/tags/maf.html</loc>
-<lastmod>2016-03-21T00:00:00+08:06</lastmod>
+<loc>/tags/nba.html</loc>
+<lastmod>2016-02-25T20:58:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/tags/nba.html</loc>
-<lastmod>2016-02-25T20:58:00+08:06</lastmod>
+<loc>/tags/keithley.html</loc>
+<lastmod>2016-03-18T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
