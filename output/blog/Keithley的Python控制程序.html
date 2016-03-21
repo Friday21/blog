@@ -137,59 +137,59 @@
 <ul>
 <li>首先连接仪器</li>
 </ul>
-<div class="highlight"><pre><span></span># 默认GPIB_address 地址为17（Keithley 2410）,2400为15
-GPIB_address = 15
-def connect_inst():
-    rm = visa.ResourceManager()
-    inst = rm.open_resource(&#39;GPIB0::%d::INSTR&#39; % GPIB_address)
-    inst.write(&#39;:outp on&#39;)
-    return inst
+<div class="highlight"><pre><span></span><span class="c1"># 默认GPIB_address 地址为17（Keithley 2410）,2400为15</span>
+<span class="n">GPIB_address</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="k">def</span> <span class="nf">connect_inst</span><span class="p">():</span>
+    <span class="n">rm</span> <span class="o">=</span> <span class="n">visa</span><span class="o">.</span><span class="n">ResourceManager</span><span class="p">()</span>
+    <span class="n">inst</span> <span class="o">=</span> <span class="n">rm</span><span class="o">.</span><span class="n">open_resource</span><span class="p">(</span><span class="s1">&#39;GPIB0::</span><span class="si">%d</span><span class="s1">::INSTR&#39;</span> <span class="o">%</span> <span class="n">GPIB_address</span><span class="p">)</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;:outp on&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">inst</span>
 </pre></div>
 
 
 <p>其中像<code>:output on</code>之类的命令是根据Keithley 2400仪表的说明书来编写的，各个功能的实现都要参考说明书上的命令集
 * 测量结束后关闭仪器，使参数恢复初始状态, 关闭输出</p>
-<div class="highlight"><pre><span></span>def close_inst(inst):
-    inst.write(&quot;*RST&quot;)
-    inst.write(&quot;*CLS&quot;)
-    inst.write(&quot;SYSTEM:TIME:RESET:AUTO 0&quot;)
-    inst.write(&#39;:outp off&#39;)
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">close_inst</span><span class="p">(</span><span class="n">inst</span><span class="p">):</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;*RST&quot;</span><span class="p">)</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;*CLS&quot;</span><span class="p">)</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;SYSTEM:TIME:RESET:AUTO 0&quot;</span><span class="p">)</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;:outp off&#39;</span><span class="p">)</span>
 </pre></div>
 
 
 <ul>
 <li>测量过程</li>
 </ul>
-<div class="highlight"><pre><span></span>def IV_sweep(start=-3, end=3, step=60, delay=100, interval=300):
-    &quot;&quot;&quot;
-    :param start: 起始测量电压
-    :param end: 结束测量电压
-    :param step: 测量分多少步进行
-    :param delay: 测量延迟（ms）
-    :param interval: 测量间隔（ms）
-    &quot;&quot;&quot;
-    inst = connect_inst()
-    # 使电压量程自动随输入电压的值变化
-    Range = 1.1*(math.fabs(end) if math.fabs(end) &gt; math.fabs(start) else math.fabs(start))
-    inst.write(&#39;:SOUR:VOLT:RANG &#39; + str(Range))
-    inst.write(&#39;:SOUR:DEL &#39;+str(delay/1000))
-    stage = (end - start)/step
-    Ilist = list()
-    Vlist = list()
-    for i in range(step+1):
-        V = start + stage*i
-        # 设置测量电压
-        inst.write(&#39;:source:volt %s&#39; % V)
-        # 读取参数
-        inst.write(&#39;read?&#39;)
-        data = inst.read(&quot;TRACE:DATA&quot;)
-        I = float(data.split(&#39;,&#39;)[1])
-        # 将测量结果保存到Ilist 和Vlist中
-        Ilist.append(I)
-        Vlist.append(V)
-        inst.write(&#39;:source:volt 0&#39;)
-        time.sleep(interval/1000)
-    close_inst(inst)
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">IV_sweep</span><span class="p">(</span><span class="n">start</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param start: 起始测量电压</span>
+<span class="sd">    :param end: 结束测量电压</span>
+<span class="sd">    :param step: 测量分多少步进行</span>
+<span class="sd">    :param delay: 测量延迟（ms）</span>
+<span class="sd">    :param interval: 测量间隔（ms）</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">inst</span> <span class="o">=</span> <span class="n">connect_inst</span><span class="p">()</span>
+    <span class="c1"># 使电压量程自动随输入电压的值变化</span>
+    <span class="n">Range</span> <span class="o">=</span> <span class="mf">1.1</span><span class="o">*</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">end</span><span class="p">)</span> <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">end</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="k">else</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">start</span><span class="p">))</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;:SOUR:VOLT:RANG &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Range</span><span class="p">))</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;:SOUR:DEL &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">delay</span><span class="o">/</span><span class="mi">1000</span><span class="p">))</span>
+    <span class="n">stage</span> <span class="o">=</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span><span class="o">/</span><span class="n">step</span>
+    <span class="n">Ilist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">Vlist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">step</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">stage</span><span class="o">*</span><span class="n">i</span>
+        <span class="c1"># 设置测量电压</span>
+        <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;:source:volt </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">V</span><span class="p">)</span>
+        <span class="c1"># 读取参数</span>
+        <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;read?&#39;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;TRACE:DATA&quot;</span><span class="p">)</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># 将测量结果保存到Ilist 和Vlist中</span>
+        <span class="n">Ilist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+        <span class="n">Vlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+        <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;:source:volt 0&#39;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">interval</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">close_inst</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
 </pre></div>
 
 
@@ -209,21 +209,21 @@ def connect_inst():
 <img alt="Alt text" src="/images/figure_1.png" />  </p>
 <p>*实现实时绘图
 若要实现实时绘图，就要开启plot的交互模式：</p>
-<div class="highlight"><pre><span></span>  <span class="s s-Atom">#</span> <span class="s s-Atom">开启实时绘图</span>
-    <span class="s s-Atom">plt</span><span class="p">.</span><span class="nf">ion</span><span class="p">()</span>
-    <span class="s s-Atom">for</span> <span class="s s-Atom">i</span> <span class="s s-Atom">in</span> <span class="nf">range</span><span class="p">(</span><span class="s s-Atom">step</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="s s-Atom">:</span>
-        <span class="p">......</span>
-        <span class="s s-Atom">plt</span><span class="p">.</span><span class="nf">axis</span><span class="p">([</span><span class="nf">min</span><span class="p">(</span><span class="nv">Vlist</span><span class="p">)</span><span class="o">*</span><span class="mf">1.1</span><span class="p">,</span> <span class="nf">max</span><span class="p">(</span><span class="nv">Vlist</span><span class="p">)</span><span class="o">*</span><span class="mf">1.1</span><span class="p">,</span> <span class="nf">min</span><span class="p">(</span><span class="nv">Ilist</span><span class="p">),</span> <span class="nf">max</span><span class="p">(</span><span class="nv">Ilist</span><span class="p">)])</span>
-        <span class="s s-Atom">plt</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="nv">Vlist</span><span class="p">,</span> <span class="nv">Ilist</span><span class="p">,</span> <span class="s s-Atom">r&#39;b-D&#39;</span><span class="p">)</span>
-        <span class="s s-Atom">#</span> <span class="s s-Atom">这个为停顿0</span><span class="mf">.01</span><span class="s s-Atom">s，能得到产生实时的效果</span>
-        <span class="s s-Atom">plt</span><span class="p">.</span><span class="nf">pause</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-        <span class="s s-Atom">if</span> <span class="s s-Atom">i</span> <span class="o">==</span> <span class="nn">step</span><span class="p">:</span>
-            <span class="s s-Atom">#</span> <span class="s s-Atom">保存图片</span>
-            <span class="nf">savefig</span><span class="p">(</span><span class="s s-Atom">savefile</span><span class="p">.</span><span class="s s-Atom">name</span><span class="p">[:-</span><span class="mi">4</span><span class="p">]</span><span class="s s-Atom">+&#39;.png&#39;</span><span class="p">)</span>
-            <span class="s s-Atom">#</span> <span class="s s-Atom">关闭交互模式</span>
-            <span class="s s-Atom">plt</span><span class="p">.</span><span class="nf">ioff</span><span class="p">()</span>
-            <span class="s s-Atom">plt</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
-            <span class="s s-Atom">savefile</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+<div class="highlight"><pre><span></span>  <span class="c1"># 开启实时绘图</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">step</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="o">......</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">Vlist</span><span class="p">)</span><span class="o">*</span><span class="mf">1.1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">Vlist</span><span class="p">)</span><span class="o">*</span><span class="mf">1.1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">Ilist</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">Ilist</span><span class="p">)])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Vlist</span><span class="p">,</span> <span class="n">Ilist</span><span class="p">,</span> <span class="s1">r&#39;b-D&#39;</span><span class="p">)</span>
+        <span class="c1"># 这个为停顿0.01s，能得到产生实时的效果</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">step</span><span class="p">:</span>
+            <span class="c1"># 保存图片</span>
+            <span class="n">savefig</span><span class="p">(</span><span class="n">savefile</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+            <span class="c1"># 关闭交互模式</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ioff</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">savefile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 
 
@@ -233,30 +233,30 @@ def connect_inst():
 <h1 id="5">5. 温度控制</h1>
 <p>其实不仅仅是Keithley，其它GPIB连接的仪器也可以同样用Python控制，比如温度控制仪model 331<br />
 下面是一个温度控制的小程序：</p>
-<div class="highlight"><pre><span></span>def term_ctrl(start, end, speed):
-    &quot;&quot;&quot;
-    :param start: 起始温度  K
-    :param end: 目标温度    K
-    :param speed: 变温速度  K/min
-    :return:
-    &quot;&quot;&quot;
-    inst = connect_inst()
-    inst.write(&#39;ramp 1,0&#39;)
-    time.sleep(0.5)
-    inst.write(&#39;setp 1,&#39; + str(start))
-    time.sleep(0.5)
-    inst.write(&#39;ramp 1,1,&#39; + str(speed))
-    time.sleep(0.5)
-    inst.write(&#39;setp 1,&#39; + str(end))
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">term_ctrl</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">speed</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param start: 起始温度  K</span>
+<span class="sd">    :param end: 目标温度    K</span>
+<span class="sd">    :param speed: 变温速度  K/min</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">inst</span> <span class="o">=</span> <span class="n">connect_inst</span><span class="p">()</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;ramp 1,0&#39;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;setp 1,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="p">))</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;ramp 1,1,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">speed</span><span class="p">))</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;setp 1,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">))</span>
 </pre></div>
 
 
 <p>短短几行就可以实现Labview的温控程序啦，方便不只是一点点！而且扩展起来很方便，比如：  </p>
-<div class="highlight"><pre><span></span>term_ctrl(290, 240, 1)
-time.sleep(50*60)
-term_ctrl(240, 220, 0.3)
-time.sleep(70*60)
-term_ctrl(220, 170, 0.5)
+<div class="highlight"><pre><span></span><span class="n">term_ctrl</span><span class="p">(</span><span class="mi">290</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">50</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">term_ctrl</span><span class="p">(</span><span class="mi">240</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">70</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">term_ctrl</span><span class="p">(</span><span class="mi">220</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 
 
