@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>我的精神家园</title><link href="/" rel="alternate"></link><link href="/feeds/technology.atom.xml" rel="self"></link><id>/</id><updated>2016-03-18T00:00:00+08:00</updated><entry><title>用Python控制Keithley测量仪器</title><link href="/blog/Keithley%E7%9A%84Python%E6%8E%A7%E5%88%B6%E7%A8%8B%E5%BA%8F.html" rel="alternate"></link><updated>2016-03-18T00:00:00+08:00</updated><author><name>Friday</name></author><id>tag:,2016-03-18:blog/Keithley的Python控制程序.html</id><summary type="html">&lt;h1 id="_1"&gt;背景&lt;/h1&gt;
+&lt;p&gt;作为一名凝聚态物理学生，做科研的大部分时间都在和各种测量仪器打交道，我最常用的要数Keithley 2400, 2410等测量电信号的仪器了，Keithley仪器的分辨率还是很高的，2400测量电压和电流都能精确到纳(10^-9)的量级，6517更是能达到皮（10^-12）的量级, 非常了不起。实验室用来控制这几台仪器的程序都是Labview程序，属于G语言吧，研一刚进实验室的时候师姐给我讲了一个多小时才给我讲明白一个简单测量IV的程序流程，研一寒假前为了能够实现Labview调用的子程序中的一个参数能够在图表上实时显示，费了老大劲了，虽然最终实现了，但现在基本忘记怎么做的了，总之很复杂。看一下Labview的程序（其实就是画图啦）：
+&lt;img alt="Alt text" src="/images/前面板.PNG" /&gt;
+&lt;img alt="Alt text" src="/images/后面板.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;前面板UI还好，但后面板程序图真是太不具有可读性啦，扩展性也很差，想添加个新功能得画半天图，于是我想如果能用Python控制这些测量仪器就好啦，这样就可以把每个测量功能封装成一个函数，需要扩展新功能的话直接调用再修改就好啦，抱着试试看的态度（买了一疗程）在github上搜索Keithley真的搜出来几条Python写的控制程序，好开心，于是下定决心把自己常用的几个Labview测量程序Python化！&lt;/p&gt;
+&lt;h1 id="1"&gt;1. 环境搭建&lt;/h1&gt;
+&lt;p&gt;首先是接口的连接，要通过Python连接上GPIB接口需要对应的库，这里用到的是pyvisa, 官方教程在&lt;a href="https://pyvisa.readthedocs.org/en/stable/"&gt;这里&lt;/a&gt;, 我用的Python IDE是pycharm，所以直接在pycharm上搜索安装pyvisa就好了（真的很方便），但根据pyvisa的说明还需要安装 National Instruments’s VISA ，去&lt;a href="http://search.ni.com/nisearch/app/main/p/ap/tech/lang/zhs/pg/1/sn/ssnav:ndr/fil/AND(nicontenttype:driver,%20sitesection:ndr,%20AND%20(OR(nigen10:1640,%20productcategories:1640,%20%22NI-VISA%22)%20,%20OR(nilanguage:zh-CN,%20nilanguage:en)"&gt;官网&lt;/a&gt;下载适合自己电脑的版本，由于目前Linux平台只支持32位的，而我的是Ubuntu 14.04LTS，没办法，只好装在win10上了，pyvisa和National Instruments’s VISA都安装成功后就可以进行下一步了  &lt;/p&gt;
+&lt;h1 id="2"&gt;2. 连接仪器&lt;/h1&gt;
+&lt;p&gt;如果用的台式机，又有GPIB扩展槽，直接连上仪器就行了，我用的笔记本，所以还需要一条USB-GPIB线，这里用的是KUSB-488A  ，第一次用肯定要装驱动的，若不能自动安装则需要去官网下载驱动，一切就绪后，执行以下Python语句以检测是否成功连上仪器：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;visa&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;rm&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;visa&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ResourceManager&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;rm&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;list_resources&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ASRL1::INSTR&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;ASRL2::INSTR&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;GPIB0::12::INSTR&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;inst&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rm&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;open_resource&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;GPIB0::12::INSTR&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;query&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;*IDN?&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;若果第三句执行后能找到你的仪器则大功告成，否则就要检查哪个驱动出了问题&lt;/p&gt;
+&lt;h1 id="3-iv"&gt;3. 简单IV测量程序&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;首先连接仪器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# 默认GPIB_address 地址为17（Keithley 2410）,2400为15&lt;/span&gt;
+&lt;span class="n"&gt;GPIB_address&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;15&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;connect_inst&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="n"&gt;rm&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;visa&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ResourceManager&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rm&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;open_resource&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;GPIB0::&lt;/span&gt;&lt;span class="si"&gt;%d&lt;/span&gt;&lt;span class="s1"&gt;::INSTR&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;GPIB_address&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;:outp on&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;inst&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;其中像&lt;code&gt;:output on&lt;/code&gt;之类的命令是根据Keithley 2400仪表的说明书来编写的，各个功能的实现都要参考说明书上的命令集
+* 测量结束后关闭仪器，使参数恢复初始状态, 关闭输出&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;close_inst&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;*RST&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;*CLS&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;SYSTEM:TIME:RESET:AUTO 0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;:outp off&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;测量过程&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;IV_sweep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="o"&gt;=-&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;step&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;60&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;delay&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;interval&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;300&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="sd"&gt;    :param start: 起始测量电压&lt;/span&gt;
+&lt;span class="sd"&gt;    :param end: 结束测量电压&lt;/span&gt;
+&lt;span class="sd"&gt;    :param step: 测量分多少步进行&lt;/span&gt;
+&lt;span class="sd"&gt;    :param delay: 测量延迟（ms）&lt;/span&gt;
+&lt;span class="sd"&gt;    :param interval: 测量间隔（ms）&lt;/span&gt;
+&lt;span class="sd"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;connect_inst&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="c1"&gt;# 使电压量程自动随输入电压的值变化&lt;/span&gt;
+    &lt;span class="n"&gt;Range&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mf"&gt;1.1&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fabs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fabs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fabs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fabs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;:SOUR:VOLT:RANG &amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Range&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;:SOUR:DEL &amp;#39;&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;delay&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;stage&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;step&lt;/span&gt;
+    &lt;span class="n"&gt;Ilist&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;Vlist&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;step&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;V&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;start&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;stage&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;
+        &lt;span class="c1"&gt;# 设置测量电压&lt;/span&gt;
+        &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;:source:volt &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;V&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="c1"&gt;# 读取参数&lt;/span&gt;
+        &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;read?&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;TRACE:DATA&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+        &lt;span class="c1"&gt;# 将测量结果保存到Ilist 和Vlist中&lt;/span&gt;
+        &lt;span class="n"&gt;Ilist&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;Vlist&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;V&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;:source:volt 0&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;interval&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;close_inst&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这样测量结果就保存在两个list当中了，这当然不是我们要的最终结果，还需要把测量到的数据保存到文件中，而且测量过程中要实时绘图，保存数据到文件中比较基本，就不多说了，可以参考我上传到github上的&lt;a href="https://github.com/Friday21/Keithley_measure"&gt;代码&lt;/a&gt;，接下来说一说在Python下怎么实现动态绘图&lt;/p&gt;
+&lt;h1 id="4-matplotlib"&gt;4. matplotlib实时绘图&lt;/h1&gt;
+&lt;p&gt;Python有一个很好的绘图的第三方库——&lt;strong&gt;matplotlib&lt;/strong&gt;, 可以实现和matlab相媲美的绘图功能，相当好用。
+* 用matplotlib简单的绘图&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;9&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;r-o&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ylabel&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;current&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;    &lt;span class="c1"&gt;#为y轴加注释&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;show&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;效果如下：  &lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt text" src="/images/figure_1.png" /&gt;  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;实现实时绘图
+若要实现实时绘图，就要开启plot的交互模式：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;  &lt;span class="c1"&gt;# 开启实时绘图&lt;/span&gt;
+    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ion&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;step&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="o"&gt;......&lt;/span&gt;
+        &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="nb"&gt;min&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Vlist&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="mf"&gt;1.1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;max&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Vlist&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="mf"&gt;1.1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;min&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Ilist&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="nb"&gt;max&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Ilist&lt;/span&gt;&lt;span class="p"&gt;)])&lt;/span&gt;
+        &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Vlist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Ilist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;b-D&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="c1"&gt;# 这个为停顿0.01s，能得到产生实时的效果&lt;/span&gt;
+        &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pause&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;0.1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;step&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="c1"&gt;# 保存图片&lt;/span&gt;
+            &lt;span class="n"&gt;savefig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;savefile&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.png&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="c1"&gt;# 关闭交互模式&lt;/span&gt;
+            &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ioff&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="n"&gt;savefile&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;测试结果如下图：&lt;br /&gt;
+&lt;img alt="Alt text" src="/images/figure_2.png" /&gt;&lt;/p&gt;
+&lt;p&gt;再加上保存数据到文件的功能后就可以实现和Labview同样的功能啊，看了下代码，100行，虽然也不短，但逻辑很清楚，以后便于修改，下面一个例子将充分体现Python对Labview的优势。  &lt;/p&gt;
+&lt;h1 id="5"&gt;5. 温度控制&lt;/h1&gt;
+&lt;p&gt;其实不仅仅是Keithley，其它GPIB连接的仪器也可以同样用Python控制，比如温度控制仪model 331&lt;br /&gt;
+下面是一个温度控制的小程序：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;term_ctrl&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;speed&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="sd"&gt;    :param start: 起始温度  K&lt;/span&gt;
+&lt;span class="sd"&gt;    :param end: 目标温度    K&lt;/span&gt;
+&lt;span class="sd"&gt;    :param speed: 变温速度  K/min&lt;/span&gt;
+&lt;span class="sd"&gt;    :return:&lt;/span&gt;
+&lt;span class="sd"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;connect_inst&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ramp 1,0&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;setp 1,&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ramp 1,1,&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;speed&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;inst&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;setp 1,&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;短短几行就可以实现Labview的温控程序啦，方便不只是一点点！而且扩展起来很方便，比如：  &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;term_ctrl&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;290&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;240&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;50&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="mi"&gt;60&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;term_ctrl&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;240&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;220&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;0.3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;70&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="mi"&gt;60&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;term_ctrl&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;220&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;170&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;0.5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这样短短几行就可以实现在不同阶段以不同速率降温啦！&lt;/p&gt;
+&lt;h1 id="6"&gt;6. 参考文章&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://pyvisa.readthedocs.org/en/stable/"&gt;pyvisa 官方文档&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://matplotlib.org/1.5.1/users/pyplot_tutorial.html"&gt;matplotlib官方文档&lt;/a&gt;  &lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.noneface.com/2015/10/25/EE-python-serial.html"&gt;matplotlib 实时绘图&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/hinnefe2/keithley"&gt;github上的Keithley程序&lt;/a&gt;  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;本文讲到的程序可以在&lt;a href="https://github.com/Friday21/Keithley_measure"&gt;这里&lt;/a&gt;找到源代码&lt;/p&gt;</summary><category term="Python"></category><category term="Keithley"></category></entry><entry><title>Ubuntu下Pelican + Apache 搭建个人博客</title><link href="/blog/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA.html" rel="alternate"></link><updated>2016-03-05T00:00:00+08:00</updated><author><name>Friday</name></author><id>tag:,2016-03-03:blog/博客搭建.html</id><summary type="html">&lt;h2 id="_1"&gt;搭建环境&lt;/h2&gt;
+&lt;p&gt;Ubuntu 14.04 LTS
+Pelican 3.3.0
+Apache 2.4.0
+VPS：  digital ocean SFO（非必须，可已选择github page）
+域名解析：Godaddy&lt;/p&gt;
+&lt;h2 id="_2"&gt;环境配置&lt;/h2&gt;
+&lt;p&gt;安装pelican
+&lt;code&gt;pip install pelican&lt;/code&gt;  &lt;/p&gt;
+&lt;p&gt;创建blog目录&lt;br /&gt;
+&lt;code&gt;cd /var/www&lt;/code&gt;&lt;br /&gt;
+&lt;code&gt;mkdir blog&lt;/code&gt;&lt;br /&gt;
+&lt;code&gt;pelican-quickstart&lt;/code&gt;
+之后终端会问几个问题，一路默认回车就行（有一个要填一下，不过这些都可以在后来生成的pelicanconf.py文件中修改的）&lt;br /&gt;
+生成的目录结构如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;blog&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+&lt;span class="err"&gt;├──&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;                &lt;span class="c1"&gt;# 存放输入的markdown或RST源文件&lt;/span&gt;
+&lt;span class="err"&gt;│&lt;/span&gt;   &lt;span class="err"&gt;└──&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pages&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;            &lt;span class="c1"&gt;# 存放手工创建的静态页面，可选&lt;/span&gt;
+&lt;span class="err"&gt;│&lt;/span&gt;   &lt;span class="err"&gt;└──&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;posts&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;            &lt;span class="c1"&gt;# 存放手工创建的文章，可选&lt;/span&gt;
+&lt;span class="err"&gt;├──&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;                 &lt;span class="c1"&gt;# 存放最终生成的静态博客&lt;/span&gt;
+&lt;span class="err"&gt;├──&lt;/span&gt; &lt;span class="n"&gt;develop_server&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sh&lt;/span&gt;      &lt;span class="c1"&gt;# 测试服务器&lt;/span&gt;
+&lt;span class="err"&gt;├──&lt;/span&gt; &lt;span class="n"&gt;Makefile&lt;/span&gt;               &lt;span class="c1"&gt;# 管理博客的Makefile&lt;/span&gt;
+&lt;span class="err"&gt;├──&lt;/span&gt; &lt;span class="n"&gt;pelicanconf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;         &lt;span class="c1"&gt;# 配置文件&lt;/span&gt;
+&lt;span class="err"&gt;└──&lt;/span&gt; &lt;span class="n"&gt;publishconf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt;         &lt;span class="c1"&gt;# 发布文件，可删除&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id="_3"&gt;主题和插件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;克隆主题到本地
+&lt;code&gt;git clone https://github.com/getpelican/pelican-themes.git&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;安装主题——bootstrap3
+&lt;code&gt;cd pelican-themes&lt;/code&gt;
+&lt;code&gt;pelican-themes -i pelican-bootstrap3&lt;/code&gt;
+这一步是将主题&lt;code&gt;pelican-bootstrap3&lt;/code&gt;安装到Python库里，Ubuntu下路径为&lt;code&gt;/usr/local/lib/python2.7/dist-packages/pelican/themes/&lt;/code&gt;,所以后面修改字体和banner时需要在这个文件夹下的&lt;code&gt;pelican-bootstrap3/templates&lt;/code&gt;文件修改
+*克隆插件到本地
+&lt;code&gt;cd /var/www/blog&lt;/code&gt;
+&lt;code&gt;git clone git://github.com/getpelican/pelican-plugins.git&lt;/code&gt;
+此处将pelican的插件放在&lt;code&gt;/var/www/blog&lt;/code&gt;的文件夹下&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="pelicanconfpy"&gt;配置pelicanconf.py&lt;/h2&gt;
+&lt;p&gt;博客的很多内容都是在&lt;code&gt;/var/www/blog/pelicancof.py&lt;/code&gt;文件中配置的&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;AUTHOR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;u&amp;#39;Friday&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;SITENAME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;u&amp;#39;&lt;/span&gt;&lt;span class="se"&gt;\u6211\u7684\u7cbe\u795e\u5bb6\u56ed&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;#博客名字&lt;/span&gt;
+&lt;span class="n"&gt;SITEURL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http://localhost:80&amp;#39;&lt;/span&gt; 
+&lt;span class="n"&gt;TIMEZONE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Asia/Shanghai&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;#时区改成上海&lt;/span&gt;
+&lt;span class="n"&gt;THEME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;pelican-bootstrap3&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;#主题设置为pelican-bootstrap3&lt;/span&gt;
+
+&lt;span class="c1"&gt;#添加社交账号&lt;/span&gt;
+&lt;span class="n"&gt;SOCIAL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;facebook&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https://www.facebook.com/li.dongyong?ref=bookmarks&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+          &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;twitter&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;https://twitter.com/dongyongli&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+          &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;github&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;https://github.com/Friday21&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),)&lt;/span&gt;
+
+&lt;span class="n"&gt;DEFAULT_PAGINATION&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="c1"&gt;#每页显示5篇文章&lt;/span&gt;
+
+&lt;span class="n"&gt;PLUGIN_PATHS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;pelican-plugins&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,]&lt;/span&gt; &lt;span class="c1"&gt;#插件地址，因为插件放在了和blog同级目录，所以可以       直接用pelican-plugins, #若放在其他地方改成相应路径即可&lt;/span&gt;
+&lt;span class="n"&gt;PLUGINS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;sitemap&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;related_posts&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;random_article&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+           &lt;span class="s1"&gt;&amp;#39;liquid_tags.img&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;liquid_tags.video&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+           &lt;span class="s1"&gt;&amp;#39;liquid_tags.youtube&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;liquid_tags.vimeo&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+           &lt;span class="s1"&gt;&amp;#39;liquid_tags.include_code&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;tag_cloud&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;tipue_search&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="c1"&gt;#使用到的插件&lt;/span&gt;
+&lt;span class="n"&gt;RANDOM&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;random.html&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;RELATED_POSTS_MAX&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
+&lt;span class="n"&gt;DIRECT_TEMPLATES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;index&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;categories&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;authors&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;archives&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;tags&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;search&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;ARTICLE_URL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;blog/{slug}.html&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;ARTICLE_SAVE_AS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;blog/{slug}.html&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;PAGE_URL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;{slug}.html&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;PAGE_SAVE_AS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;{slug}.html&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;TAG_URL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;tags/{slug}.html&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;TAG_SAVE_AS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;tags/{slug}.html&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;TAGS_URL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;tags.html&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;DISPLAY_CATEGORIES_ON_MENU&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+&lt;span class="n"&gt;DISPLAY_CATEGORIES_ON_SIDEBAR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt; &lt;span class="c1"&gt;#不显示categories（感觉有tags就够了）&lt;/span&gt;
+&lt;span class="n"&gt;DISPLAY_TAGS_ON_SIDEBAR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt; &lt;span class="c1"&gt;#在边上显示标签栏&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id="_4"&gt;发布第一篇博客&lt;/h2&gt;
+&lt;h1 id="markdown"&gt;用markdown写下第一篇文章，开头要包含以下内容：&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Title&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;My&lt;/span&gt; &lt;span class="nb"&gt;super&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt; &lt;span class="err"&gt;必须&lt;/span&gt;
+&lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2010&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;03&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt; &lt;span class="err"&gt;必须&lt;/span&gt;
+&lt;span class="n"&gt;Modified&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2010&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;05&lt;/span&gt; &lt;span class="mi"&gt;19&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;
+&lt;span class="n"&gt;Category&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Python&lt;/span&gt;
+&lt;span class="n"&gt;Tags&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;pelican&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;publishing&lt;/span&gt;
+&lt;span class="n"&gt;Slug&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;my&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nb"&gt;super&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;post&lt;/span&gt; &lt;span class="err"&gt;必须&lt;/span&gt;
+&lt;span class="n"&gt;Authors&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Alexis&lt;/span&gt; &lt;span class="n"&gt;Metaireau&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Conan&lt;/span&gt; &lt;span class="n"&gt;Doyle&lt;/span&gt;
+&lt;span class="n"&gt;Summary&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Short&lt;/span&gt; &lt;span class="n"&gt;version&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;feeds&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;写好后把md文件放在blog下的content目录中，发布博客
+&lt;code&gt;cd /var/www/blog&lt;/code&gt;
+&lt;code&gt;make publish&lt;/code&gt;
+如果成功的话可以在blog目录下看到output文件夹，里面就是网站的所有内容，将其部署到github pages上即可以访问，在github创建username.github.io repo，其中username为你github的用户名，然后在Ubuntu上把博客内容推送到github pages上&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cd /var/www/blog/output
+git init
+git add .
+git commit -m&amp;#39;first commit&amp;#39;
+git remote add origin git@github.com:username/username.github.io.git
+git push -u origin master
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;成功后访问username.github.io即能成功看到你的blog&lt;/p&gt;
+&lt;h2 id="apache"&gt;Apache 配置&lt;/h2&gt;
+&lt;p&gt;如果不想用github page当然也可以用自己的VPS，让blog运行在Apache上
+&lt;em&gt; 安装Apache
+&lt;code&gt;sudo apt-get install apache2&lt;/code&gt;
+&lt;/em&gt; 配置虚拟主机
+&lt;code&gt;cd /etc/apache2/sites-available/&lt;/code&gt;
+新建blog的配置文件
+&lt;code&gt;vim blog.conf&lt;/code&gt; 
+添加如下内容&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;Directory&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;blog&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="c1"&gt;#博客目录&lt;/span&gt;
+        &lt;span class="n"&gt;Options&lt;/span&gt; &lt;span class="n"&gt;Indexes&lt;/span&gt; &lt;span class="n"&gt;FollowSymLinks&lt;/span&gt;
+        &lt;span class="n"&gt;AllowOverride&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+        &lt;span class="n"&gt;Require&lt;/span&gt; &lt;span class="nb"&gt;all&lt;/span&gt; &lt;span class="n"&gt;granted&lt;/span&gt;
+&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;Directory&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;VirtualHost&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;80&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="c1"&gt;# Admin email, Server Name (domain name) and any aliases&lt;/span&gt;
+    &lt;span class="n"&gt;ServerAdmin&lt;/span&gt; &lt;span class="n"&gt;lidongyong22&lt;/span&gt;&lt;span class="nd"&gt;@gmail.com&lt;/span&gt; 
+    &lt;span class="n"&gt;ServerName&lt;/span&gt;  &lt;span class="n"&gt;fridayhaohao&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt; &lt;span class="c1"&gt;#服务器名字&lt;/span&gt;
+    &lt;span class="n"&gt;ServerAlias&lt;/span&gt; &lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fridayhaohao&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt; &lt;span class="c1"&gt;#域名&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# Index file and Document Root (where the public files are located)&lt;/span&gt;
+    &lt;span class="n"&gt;DirectoryIndex&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;php&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;html&lt;/span&gt;
+    &lt;span class="n"&gt;DocumentRoot&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;blog&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="c1"&gt;#文件目录&lt;/span&gt;
+&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;VirtualHost&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;使文件生效：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ sudo a2ensite duncanlock.test
+$ sudo service apache2 restart
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;成功后需要在godaday上将你的域名连接到服务器上的ip， 在DNS ZONE FILE下添加一天A记录，HOST：@，POINTS TO: 你的服务器IP，等待一段时间后就可以通过你的域名来访问你的blog啦！&lt;/p&gt;
+&lt;h2 id="_5"&gt;进一步完善博客&lt;/h2&gt;
+&lt;h3 id="bootstrap"&gt;bootstrap主题&lt;/h3&gt;
+&lt;p&gt;bootstrap下还细分有很多主题，免费的可以在&lt;a href="http://bootswatch.com/"&gt;这里&lt;/a&gt;看到，我选的是Cerulean, 舒服的蓝色主题，只需要在pelicanconf.py中添加&lt;code&gt;BOOTSTRAP_THEME = 'cerulean'&lt;/code&gt;, 然后在blog目录下make publish 就会生效了  &lt;/p&gt;
+&lt;h3 id="banner"&gt;banner&lt;/h3&gt;
+&lt;p&gt;根据DandyDev的pelican-bootstrap3的&lt;a href="https://github.com/DandyDev/pelican-bootstrap3"&gt;文档&lt;/a&gt;的说明：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A banner image can be added to the theme, displayed with the SITENAME and an optional subtitle. Config options are as follows:
+Set the banner image with BANNER = '/path/to/banner.png'
+Set the subtitle text with BANNER_SUBTITLE = 'This is my subtitle'
+By default, the banner is only shown on the index page. To display the banner on all pages, set BANNER_ALL_PAGES = True  &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在content目录下新建文件夹&lt;code&gt;images&lt;/code&gt;, 把要设置的首页头部图片放在此文件夹下，并在pelican.conf中添加 &lt;code&gt;BANNER = '/images/banner.png'&lt;/code&gt;, banner.png 为图片的文件名，建议选好想要的图片后调整到适合的长宽比，用截图工具就行。我选了一张大海的图片，与上一步选的主题配合的很好。效果如下图：&lt;img alt="Alt text" src="/images/捕获.PNG" /&gt;&lt;/p&gt;
+&lt;h3 id="_6"&gt;字体&lt;/h3&gt;
+&lt;p&gt;pelican默认英文字体，所以中文显示很难看！按照习惯还是调成微软雅黑舒服一点，办法如下：
+尽如Python的pelican库文件夹，编辑style.css文件我的目录是&lt;code&gt;/usr/local/lib/python2.7/dist-packages/pelican/themes/pelican-bootstrap3/static/css/style.css&lt;/code&gt;
+在头部添加以下两段：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;h2&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;h3&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;h4&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;h5&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;h6&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h2&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h3&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h4&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h5&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nc"&gt;.h6&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;font-family&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Microsoft YaHei UI&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Microsoft YaHei&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Arial&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Verdana&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Tahoma&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;font-weight&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;500&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="nt"&gt;body&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;font-family&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Microsoft YaHei&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Arial&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Verdana&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Tahoma&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#424242&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;make publish 后就能看到中文显示舒服多了。
+其实在这个文件中还可以进一步美化banner，比如把我的精神家园后面的黑框改为透明的，只需要把backgroud中的0.7改为0就行啦&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nn"&gt;#banner&lt;/span&gt; &lt;span class="nc"&gt;.copy&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;background&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;none&lt;/span&gt; &lt;span class="nb"&gt;repeat&lt;/span&gt; &lt;span class="nb"&gt;scroll&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="n"&gt;rgba&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="m"&gt;7&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="nb"&gt;display&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;inline&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;left&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;max-width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;600px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;padding&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;20px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;position&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;relative&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;z-index&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;改完后make publish就能看到效果了，体会下两张图的不同：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt text" src="/images/banner1.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt text" src="/images/banner2.PNG" /&gt;&lt;/p&gt;
+&lt;p&gt;下图是设置为0.7的效果，上图是设置成0的透明效果。哈哈虽然前端基础为0，但这个过程中对前端增加了些了解。&lt;/p&gt;
+&lt;h3 id="_7"&gt;添加多说评论&lt;/h3&gt;
+&lt;p&gt;作为blog怎么能少的了评论呢，pelican自带的评论插件是Disqus comments， 但那是针对国外用户的，咱在局域网中上不了Facebook和Twitter，所以还是选择国内有名的评论插件——多说评论。&lt;br /&gt;
+首先需要在&lt;a href="http://duoshuo.com/"&gt;多说&lt;/a&gt;的网站上注册，绑定网站信息，获取js代码，并根据提示修改成如下代码：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c"&gt;&amp;lt;!-- 多说评论框 start --&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;ds-thread&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-thread-key&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;{{ article.slug }}&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;{{ article.title }}&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-url&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;{{ SITEURL }}/{{ article.url }}&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt;&amp;lt;!-- 多说评论框 end --&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt;&amp;lt;!-- 多说公共JS代码 start (一个网页只需插入一次) --&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;duoshuoQuery&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;short_name&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;lyon0804&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;ds&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;createElement&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;script&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;ds&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;type&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;text/javascript&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="nx"&gt;ds&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;async&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="nx"&gt;ds&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;src&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;protocol&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http:&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;//static.duoshuo.com/embed.js&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="nx"&gt;ds&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;charset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;UTF-8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getElementsByTagName&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;head&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+         &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getElementsByTagName&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;body&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]).&lt;/span&gt;&lt;span class="nx"&gt;appendChild&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;ds&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;})();&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt;&amp;lt;!-- 多说公共JS代码 end --&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;尽如pelican的Python库，编辑评论模板，&lt;br /&gt;
+&lt;code&gt;vim /usr/local/lib/python2.7/dist-packages/pelican/themes/pelican-bootstrap3/templates/includes/comments.html&lt;/code&gt;
+对照着disqus评论添加如下内容：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;{% if DUOSHUO_SITENAME %}
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;hr&lt;/span&gt;&lt;span class="p"&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;section&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;comments&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;comments&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;h2&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Comments&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;h2&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;ds-thread&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-thread-key&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;{{ article.slug }}&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;{{ article.title }}&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;data-url&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;{{ SITEURL }}/{{ article.url }}&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;duoshuoQuery&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;short_name&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{{ DUOSHUO_SITENAME }}&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+            &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;ds&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;createElement&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;script&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+                &lt;span class="nx"&gt;ds&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;type&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;text/javascript&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="nx"&gt;ds&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;async&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+                &lt;span class="nx"&gt;ds&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;src&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;protocol&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;https:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http:&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;//static.duoshuo.com/embed.js&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+                &lt;span class="nx"&gt;ds&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;charset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;UTF-8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+                &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getElementsByTagName&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;head&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+                 &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;document&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getElementsByTagName&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;body&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]).&lt;/span&gt;&lt;span class="nx"&gt;appendChild&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;ds&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="p"&gt;})();&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;noscript&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Please enable JavaScript to view the &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;a&lt;/span&gt; &lt;span class="na"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;http://duoshuo.com/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;comments powered by
+        Duoshuo.&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;a&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;noscript&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;a&lt;/span&gt; &lt;span class="na"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;http://duoshuo.com&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;dsq-brlink&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;comments powered by &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;span&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Duoshuo&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;span&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;a&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;section&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+{% endif %}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然后在pelicanconf.py中添加DUOSHUO_SITENAME字段，make publish 即可生效，我在多说网站上填的是fridayhaohao，所以我添加了&lt;code&gt;DUOSHUO_SITENAME = 'fridayhaohao'&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id="google"&gt;Google站内搜索&lt;/h3&gt;
+&lt;p&gt;pelican自带的tipue_search用起来bug多多，果断换成高大上的Google站内搜索 ，根据网上的指导自己怎么做都不成功，最终折腾的结果是在pelicanconf中启用tipue_search（因为我懒得去调搜索框的大小），但是把search.html内容换成Google站内搜索的代码，搞定！(pelican-bootstrap3似乎没有bootstrap2的Google搜索内置代码，坑！)
+* 启用tipue_search
+在PLUGINS中添加tipue_search
+在DIRECT_TEMPLATES中添加search&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;PLUGINS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;sitemap&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;related_posts&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;random_article&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+           &lt;span class="s1"&gt;&amp;#39;liquid_tags.img&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;liquid_tags.video&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+           &lt;span class="s1"&gt;&amp;#39;liquid_tags.youtube&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;liquid_tags.vimeo&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+           &lt;span class="s1"&gt;&amp;#39;liquid_tags.include_code&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;tag_cloud&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;tipue_search&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;DIRECT_TEMPLATES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;index&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;categories&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;authors&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;archives&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;tags&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;search&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;换成Google站内搜索
+首先在&lt;a href="https://cse.google.com/cse/all"&gt;Google站内搜索&lt;/a&gt;申请，得到自己的ID，然后把search.html替换为如下内容：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;html&lt;/span&gt; &lt;span class="na"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;zh_CN&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;head&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;meta&lt;/span&gt; &lt;span class="na"&gt;charset&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;utf-8&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;站内搜索&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;head&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;body&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="nn"&gt;#search-box&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;position&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;relative&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;50%&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;margin&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;padding&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;1em&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="nn"&gt;#search-form&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;height&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;30px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;border&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;1px&lt;/span&gt; &lt;span class="nb"&gt;solid&lt;/span&gt; &lt;span class="m"&gt;#999&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;webkit&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nb"&gt;border&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;radius&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;5px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;moz&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nb"&gt;border&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;radius&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;5px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;border&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;radius&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;5px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;background-color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#fff&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;overflow&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;hidden&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="nn"&gt;#search-text&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;font-size&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;14px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#ddd&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;border-width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;background&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;transparent&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="nn"&gt;#search-box&lt;/span&gt; &lt;span class="nt"&gt;input&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="nt"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nb"&gt;width&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;90%&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;padding&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;4px&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="m"&gt;12px&lt;/span&gt; &lt;span class="m"&gt;1em&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#333&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="nb"&gt;outline&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;none&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;search-box&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt; &lt;span class="na"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;/search.html&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;search-form&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;method&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;get&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;target&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;_top&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;input&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;search-text&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;q&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;placeholder&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Search&amp;#39;&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;text&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;cse&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;style&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;width: 100%;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Loading&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt; &lt;span class="na"&gt;src&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;http://www.google.com/jsapi&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt; 
+  &lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;load&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;search&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;language&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;zh-CN&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;style&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;loader&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;themes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;V2_DEFAULT&lt;/span&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+  &lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;setOnLoadCallback&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;customSearchOptions&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{};&lt;/span&gt;  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;customSearchControl&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;CustomSearchControl&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+      &lt;span class="s1"&gt;&amp;#39;012191777864628038963:**********&amp;lt;!写入你申请的google站内搜索的ID号&amp;gt;）&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;customSearchOptions&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="nx"&gt;customSearchControl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;setResultSetSize&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;FILTERED_CSE_RESULTSET&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;options&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;google&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;DrawOptions&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="nx"&gt;options&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;enableSearchResultsOnly&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; 
+    &lt;span class="nx"&gt;customSearchControl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;draw&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;cse&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;options&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;parseParamsFromUrl&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;params&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{};&lt;/span&gt;
+      &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;parts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;substr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\x26&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+      &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="nx"&gt;parts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;keyValuePair&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;parts&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="p"&gt;].&lt;/span&gt;&lt;span class="nx"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;=&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;key&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;decodeURIComponent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;keyValuePair&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="nx"&gt;params&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;key&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;keyValuePair&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt;
+            &lt;span class="nb"&gt;decodeURIComponent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;keyValuePair&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;].&lt;/span&gt;&lt;span class="nx"&gt;replace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sr"&gt;/\+/g&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39; &amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt;
+            &lt;span class="nx"&gt;keyValuePair&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+      &lt;span class="p"&gt;}&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;params&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;urlParams&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;parseParamsFromUrl&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;queryParamName&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;q&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;urlParams&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;queryParamName&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nx"&gt;customSearchControl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;execute&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;urlParams&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;queryParamName&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;body&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;html&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;make publish 生效，但是&lt;strong&gt;局域网&lt;/strong&gt;内上不了Google，所以搜索功能只能翻墙使用，但对我来说不算问题，blog搜索功能主要还是自己用&lt;/p&gt;
+&lt;h3 id="_8"&gt;参考文章&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="http://guozhongxin.com/pages/2014/09/25/build_blog_with_pelican.html"&gt;谷歌站内搜索&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.lyon0804.com/zai-pelicanzhong-shi-yong-duo-shuo.html"&gt;添加多说评论&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://edi.wang/Post/2013/12/9/bootstrap-3-usage-experience"&gt;字体设置&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://blog.atime.me/note/pelican-setup-summary.html"&gt;pelicanconf.py配置&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.lizherui.com/pages/2013/08/17/build_blog.html"&gt;pelican搭建教程&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.jianshu.com/p/d80a5cefc128"&gt;pelican搭建教程2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://duncanlock.net/blog/2013/05/17/how-i-built-this-website-using-pelican-part-1-setup/"&gt;apache2配置&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</summary><category term="Python"></category></entry></feed>
