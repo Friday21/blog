@@ -122,7 +122,7 @@
 <h1 id="1">1. 环境搭建</h1>
 <p>首先是接口的连接，要通过Python连接上GPIB接口需要对应的库，这里用到的是pyvisa, 官方教程在<a href="https://pyvisa.readthedocs.org/en/stable/">这里</a>, 我用的Python IDE是pycharm，所以直接在pycharm上搜索安装pyvisa就好了（真的很方便），但根据pyvisa的说明还需要安装 National Instruments’s VISA ，去<a href="http://search.ni.com/nisearch/app/main/p/ap/tech/lang/zhs/pg/1/sn/ssnav:ndr/fil/AND(nicontenttype:driver,%20sitesection:ndr,%20AND%20(OR(nigen10:1640,%20productcategories:1640,%20%22NI-VISA%22)%20,%20OR(nilanguage:zh-CN,%20nilanguage:en)">官网</a>下载适合自己电脑的版本，由于目前Linux平台只支持32位的，而我的是Ubuntu 14.04LTS，没办法，只好装在win10上了，pyvisa和National Instruments’s VISA都安装成功后就可以进行下一步了  </p>
 <h1 id="2">2. 连接仪器</h1>
-<p>如果用的台式机，又有GPIB扩展槽，直接脸上仪器就行了，我用的笔记本，所以还需要一跳USB-GPIB线，这里用的是  ，第一次用肯定要装驱动的，若不能自动安装则需要去官网下载驱动，一切就绪后，执行以下Python语句以检测是否成功连上仪器：</p>
+<p>如果用的台式机，又有GPIB扩展槽，直接连上仪器就行了，我用的笔记本，所以还需要一条USB-GPIB线，这里用的是KUSB-488A  ，第一次用肯定要装驱动的，若不能自动安装则需要去官网下载驱动，一切就绪后，执行以下Python语句以检测是否成功连上仪器：</p>
 <div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">visa</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">rm</span> <span class="o">=</span> <span class="n">visa</span><span class="o">.</span><span class="n">ResourceManager</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">rm</span><span class="o">.</span><span class="n">list_resources</span><span class="p">()</span>
@@ -205,10 +205,12 @@
 </pre></div>
 
 
-<p>效果如下：
-<img alt="Alt text" src="/images/figure_1.png" />  </p>
-<p>*实现实时绘图
-若要实现实时绘图，就要开启plot的交互模式：</p>
+<p>效果如下：  </p>
+<p><img alt="Alt text" src="/images/figure_1.png" />  </p>
+<ul>
+<li>实现实时绘图
+若要实现实时绘图，就要开启plot的交互模式：</li>
+</ul>
 <div class="highlight"><pre><span></span>  <span class="c1"># 开启实时绘图</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">step</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
