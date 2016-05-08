@@ -5,37 +5,44 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2016-04-07T20:28:17-00:00</lastmod>
+<lastmod>2016-05-08T04:42:55-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2016-04-07T20:28:17-00:00</lastmod>
+<lastmod>2016-05-08T04:42:55-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2016-04-07T20:28:17-00:00</lastmod>
+<lastmod>2016-05-08T04:42:55-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2016-04-07T20:28:17-00:00</lastmod>
+<lastmod>2016-05-08T04:42:55-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/about-me.html</loc>
-<lastmod>2016-04-07T20:28:17-00:00</lastmod>
+<lastmod>2016-05-08T04:42:55-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.3</priority>
+</url>
+
+<url>
+<loc>/blog/库布齐沙漠穿越.html</loc>
+<lastmod>2016-05-08T00:00:00+08:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
 </url>
 
 <url>
@@ -124,7 +131,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/life.html</loc>
-<lastmod>2016-04-08T00:00:00+08:06</lastmod>
+<lastmod>2016-05-08T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -137,15 +144,15 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>/tags/pao-bu.html</loc>
-<lastmod>2016-04-08T00:00:00+08:06</lastmod>
+<loc>/tags/shan-ye.html</loc>
+<lastmod>2016-05-08T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/tags/python.html</loc>
-<lastmod>2016-03-18T00:00:00+08:06</lastmod>
+<loc>/tags/pao-bu.html</loc>
+<lastmod>2016-04-08T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -165,8 +172,15 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>/tags/python.html</loc>
+<lastmod>2016-03-18T00:00:00+08:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>/author/friday.html</loc>
-<lastmod>2016-04-08T00:00:00+08:06</lastmod>
+<lastmod>2016-05-08T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
